@@ -5,7 +5,7 @@ function Canvas() {
     this.canvas.width = innerWidth;
     this.canvas.height = innerHeight;
     this.ctx = this.canvas.getContext("2d");
-    console.log(this.canvas);
+    
 }
 Canvas.prototype.addNewObject = function(newObject = [{draw,update}]) {
     newObject.forEach(e => {
