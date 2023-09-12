@@ -1,5 +1,6 @@
 
 function Canvas() {
+    this.frame = 0;
     this.objects = [];
     this.canvas = document.getElementById("canvas");
     this.canvas.width = innerWidth;
@@ -23,6 +24,7 @@ Canvas.prototype.update = function() {
     })
 }
 Canvas.prototype.anim = function() {
+    this.frame++;
     this.ctx.clearRect(0,0,innerWidth,innerHeight);
     this.draw();
     this.update();
