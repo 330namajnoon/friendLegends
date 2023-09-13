@@ -9,7 +9,7 @@ export default function Pelota(x = 0,y = 0,r = 10,sx = 10, sy = 10)
     this.sy = 0;
     
     window.addEventListener("keydown",(e)=> {
-        console.log(e.keyCode);
+       
         switch (e.keyCode) {
             case 37:
                 this.sx = -sx;
