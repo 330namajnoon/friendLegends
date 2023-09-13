@@ -5,7 +5,7 @@ import Vector from "./Vector.js";
 const sinaImage = new Image();
 sinaImage.src = "../../aseets/sprites/ghost.png";
 
-export default function Sina(x = 0, y = 0, sx = 1, sy = 1, w = 0, h = 0) {
+export default function Sina(x = 0, y = 0, sx = 1, sy = 10, w = 0, h = 0) {
     this.animate = new Animated([
         new Animation("IDLE", [
             new Frame("F1", new Vector(7, 4, 16, 28), 0),
@@ -50,8 +50,8 @@ export default function Sina(x = 0, y = 0, sx = 1, sy = 1, w = 0, h = 0) {
             new Frame("F6", new Vector(166, 164, 19, 28), 62),
             new Frame("F7", new Vector(198, 164, 19, 28), 75),
             new Frame("F8", new Vector(230, 164, 19, 28), 87),
-            
-        ], 50,true),
+
+        ], 50),
     ]);
     this.animate.start();
     this.selectedFrame = this.min;
@@ -68,6 +68,8 @@ export default function Sina(x = 0, y = 0, sx = 1, sy = 1, w = 0, h = 0) {
     };
     this.walking = false;
     this.runing = false;
+    this.jumping = false;
+    this.gravity = 0;
     window.addEventListener("keydown", (e) => {
         console.log(e.keyCode)
         switch (e.keyCode) {
@@ -94,8 +96,9 @@ export default function Sina(x = 0, y = 0, sx = 1, sy = 1, w = 0, h = 0) {
                 break;
             case 32:
               
+
                 break;
-            
+
         }
     })
     window.addEventListener("keyup", (e) => {
@@ -114,13 +117,22 @@ export default function Sina(x = 0, y = 0, sx = 1, sy = 1, w = 0, h = 0) {
                 this.sx = sx;
 
                 break;
+            case 32:
+                this.animate.setAnimation("JUMP");
+                this.animate.start();
+                this.jumping = true;
+                setTimeout(()=> {
+                    this.sy = -9;
+                    this.gravity = 0.3;
+                },200)
+                //this.sy = this.sy * -1;
+                break;
         }
     })
 
 
     this.idle();
-    this.animate.setAnimation("JUMP");
-    this.animate.start();
+
 
 }
 Sina.prototype.draw = function () {
@@ -195,7 +207,31 @@ Sina.prototype.dash = function () {
 
     this.walking = true;
 }
+Sina.prototype.jump = function () {
+    if (this.jumping) {
+        // if (this.y <= 700) {
+        //     this.sy = this.sy * -1;
+        //     this.jumping = false
+        // }
+    }
+    if(this.y + (this.h / 2) >= innerHeight) {
+        this.gravity = 0;
+        this.sy = 0;
+        this.y = innerHeight - (this.h / 2) - 1;
+        this.animate.stop();
+        this.idle();
+    }
+
+    setTimeout(() => {
+
+    }, 100)
+}
 Sina.prototype.update = function () {
+    this.jump();
+    this.y += this.sy;
+    this.sy += this.gravity;
+    if(canvas.frame % 2  == 0) {
+    }
     //this.idle();
     this.walk();
     this.animate.run();

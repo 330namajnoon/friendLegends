@@ -8,7 +8,7 @@ imageTest();
 
 const pelota1 = new Pelota(100,100,50);
 //const sina = new Sina(100,100,1,1,60,96);
-const sina1 = new Sina(200,910,1,1,70,110);
+const sina1 = new Sina(200,910,1,5,70,110);
 
 canvas.addNewObject([sina1]);
 canvas.anim();
