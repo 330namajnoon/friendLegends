@@ -35,12 +35,23 @@ export default function Sina(x = 0, y = 0, sx = 1, sy = 1, w = 0, h = 0) {
         ], 50, true),
         new Animation("DASH", [
             new Frame("F1", new Vector(7, 132, 22, 28), 0),
-            new Frame("F1", new Vector(38, 132, 22, 28), 16),
-            new Frame("F1", new Vector(69, 132, 22, 28), 32),
-            new Frame("F1", new Vector(100, 132, 22, 28), 48),
-            new Frame("F1", new Vector(134, 132, 22, 28), 74),
-            new Frame("F1", new Vector(166, 132, 22, 28), 80),
+            new Frame("F2", new Vector(38, 132, 22, 28), 16),
+            new Frame("F3", new Vector(69, 132, 22, 28), 32),
+            new Frame("F4", new Vector(100, 132, 22, 28), 48),
+            new Frame("F5", new Vector(134, 132, 22, 28), 74),
+            new Frame("F6", new Vector(166, 132, 22, 28), 80),
         ], 50),
+        new Animation("JUMP", [
+            new Frame("F1", new Vector(7, 164, 19, 28), 0),
+            new Frame("F2", new Vector(38, 164, 19, 28), 12),
+            new Frame("F3", new Vector(71, 162, 19, 28), 25),
+            new Frame("F4", new Vector(102, 161, 19, 28), 37),
+            new Frame("F5", new Vector(134, 161, 19, 28), 50),
+            new Frame("F6", new Vector(166, 164, 19, 28), 62),
+            new Frame("F7", new Vector(198, 164, 19, 28), 75),
+            new Frame("F8", new Vector(230, 164, 19, 28), 87),
+            
+        ], 50,true),
     ]);
     this.animate.start();
     this.selectedFrame = this.min;
@@ -81,6 +92,10 @@ export default function Sina(x = 0, y = 0, sx = 1, sy = 1, w = 0, h = 0) {
             case 16:
                 this.dash();
                 break;
+            case 32:
+              
+                break;
+            
         }
     })
     window.addEventListener("keyup", (e) => {
@@ -104,7 +119,8 @@ export default function Sina(x = 0, y = 0, sx = 1, sy = 1, w = 0, h = 0) {
 
 
     this.idle();
-
+    this.animate.setAnimation("JUMP");
+    this.animate.start();
 
 }
 Sina.prototype.draw = function () {
