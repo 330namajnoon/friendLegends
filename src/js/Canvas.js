@@ -1,5 +1,6 @@
-
+const socket = io();
 function Canvas() {
+    this.socket = socket;
     this.frame = 0;
     this.objects = [];
     this.canvas = document.getElementById("canvas");

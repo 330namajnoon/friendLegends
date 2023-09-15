@@ -45,7 +45,7 @@ Animated.prototype.stop = function() {
 }
 Animated.prototype.reset = function() {
     if(!this.selectedAnimation.loop)
-        this.selectedAnimation.permission;
+        this.selectedAnimation.permission = false;
     this.selectedAnimation.frameNum = 0;
 }
 Animated.prototype.getFrame = function() {
