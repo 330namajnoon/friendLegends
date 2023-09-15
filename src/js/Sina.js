@@ -76,27 +76,27 @@ export default function Sina(x = 0, y = 0, sx = 1, sy = 10, w = 0, h = 0,socket)
         switch (e.keyCode) {
             case 39:
                 socket.emit("walk_right");
+                if (!this.walking) {
                 socket.on("walk_right",()=> {
                     this.look.look = this.look.right;
-                    if (!this.walking) {
                         this.animate.setAnimation("WALK");
                         this.animate.start();
                         this.run();
-                    }
-                    this.walking = true;
-                })
+                        this.walking = true;
+                    })
+                }
                 break;
             case 37:
                 socket.emit("walk_left");
+                if (!this.walking) {
                 socket.on("walk_left",()=> {
                     this.look.look = this.look.left;
-                    if (!this.walking) {
                         this.animate.setAnimation("WALK");
                         this.animate.start();
                         this.run();
-                    }
-                    this.walking = true;
-                })
+                        this.walking = true;
+                    })
+                }
                 break;
             case 16:
                 this.dash();
@@ -111,17 +111,25 @@ export default function Sina(x = 0, y = 0, sx = 1, sy = 10, w = 0, h = 0,socket)
     window.addEventListener("keyup", (e) => {
         switch (e.keyCode) {
             case 39:
-                this.walking = false;
-                this.animate.setAnimation("IDLE");
-                this.animate.start();
-                this.sx = sx;
+                socket.emit("walk_stop_right");
+                socket.on("walk_stop_right",()=>  {
+
+                    this.walking = false;
+                    this.animate.setAnimation("IDLE");
+                    this.animate.start();
+                    this.sx = sx;
+                })
 
                 break;
             case 37:
-                this.walking = false;
-                this.animate.setAnimation("IDLE");
-                this.animate.start();
-                this.sx = sx;
+                socket.emit("walk_stop_left");
+                socket.on("walk_stop_reft",()=>  {
+
+                    this.walking = false;
+                    this.animate.setAnimation("IDLE");
+                    this.animate.start();
+                    this.sx = sx;
+                })
 
                 break;
             case 32:
