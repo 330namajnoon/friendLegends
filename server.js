@@ -21,6 +21,12 @@ io.on("connection",(client)=> {
         
         io.emit("anim",sina);
     })
+    client.on("walk_right",()=> {
+        io.emit("walk_right");
+    })
+    client.on("walk_left",()=> {
+        io.emit("walk_left");
+    })
 
     client.on("disconnect",()=> {
         console.log(`new desconnect ${client.id}`);

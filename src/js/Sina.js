@@ -5,7 +5,8 @@ import Vector from "./Vector.js";
 const sinaImage = new Image();
 sinaImage.src = "../../aseets/sprites/ghost.png";
 
-export default function Sina(x = 0, y = 0, sx = 1, sy = 10, w = 0, h = 0) {
+export default function Sina(x = 0, y = 0, sx = 1, sy = 10, w = 0, h = 0,socket) {
+    console.log(socket)
     this.animate = new Animated([
         new Animation("IDLE", [
             new Frame("F1", new Vector(7, 4, 16, 28), 0),
@@ -74,22 +75,28 @@ export default function Sina(x = 0, y = 0, sx = 1, sy = 10, w = 0, h = 0) {
         console.log(e.keyCode)
         switch (e.keyCode) {
             case 39:
-                this.look.look = this.look.right;
-                if (!this.walking) {
-                    this.animate.setAnimation("WALK");
-                    this.animate.start();
-                    this.run();
-                }
-                this.walking = true;
+                socket.emit("walk_right");
+                socket.on("walk_right",()=> {
+                    this.look.look = this.look.right;
+                    if (!this.walking) {
+                        this.animate.setAnimation("WALK");
+                        this.animate.start();
+                        this.run();
+                    }
+                    this.walking = true;
+                })
                 break;
             case 37:
-                this.look.look = this.look.left;
-                if (!this.walking) {
-                    this.animate.setAnimation("WALK");
-                    this.animate.start();
-                    this.run();
-                }
-                this.walking = true;
+                socket.emit("walk_left");
+                socket.on("walk_left",()=> {
+                    this.look.look = this.look.left;
+                    if (!this.walking) {
+                        this.animate.setAnimation("WALK");
+                        this.animate.start();
+                        this.run();
+                    }
+                    this.walking = true;
+                })
                 break;
             case 16:
                 this.dash();

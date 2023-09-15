@@ -28,7 +28,7 @@ Canvas.prototype.anim = function() {
     this.ctx.clearRect(0,0,innerWidth,innerHeight);
     this.draw();
     this.update();
-    //requestAnimationFrame(this.anim.bind(this));
+    requestAnimationFrame(this.anim.bind(this));
 }
 
 const canvas = new Canvas();
