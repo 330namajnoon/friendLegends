@@ -1,9 +1,18 @@
 import { Animated, Animation, Frame } from "./Animated.js";
 import canvas from "./Canvas.js";
 import Vector from "./Vector.js";
+import { Crash } from "./Crash.js";
 
 
-export default function Sina(name = "sina", look = "RIGHT", x = 0, y = 0, sx = 1, sy = 10, runS = 2.5, w = 0, h = 0) {
+export default function Sina(name = "sina", look = "RIGHT", x = 0, y = 0, sx = 1, sy = 10, runS = 2.5,gravity = 0.3, w = 0, h = 0) {
+    this.crash = new Crash([
+        new Vector(0,200,10,200),
+    ]);
+    this.crash1 = new Crash([
+        new Vector(100,0,100,200),
+    ]);
+    console.log(this.crash.crashed(this.crash1));
+    
     this.image = new Image();
     this.image.src = `../../aseets/sprites/${name}.png`;
     this.user = JSON.parse(localStorage.getItem("user"));
@@ -53,7 +62,7 @@ export default function Sina(name = "sina", look = "RIGHT", x = 0, y = 0, sx = 1
             new Frame("F7", new Vector(198, 164, 19, 28), 75),
             new Frame("F8", new Vector(230, 164, 19, 28), 87),
 
-        ], 50),
+        ], gravity * 300),
     ]);
     this.animate.start();
     this.selectedFrame = this.min;
@@ -159,13 +168,14 @@ export default function Sina(name = "sina", look = "RIGHT", x = 0, y = 0, sx = 1
     canvas.socket.on(`run_stop_${this.name}`, () => {
         this.sx -= this.runS;
     })
-    canvas.socket.on(`jump_${this.name}`, () => {
+    canvas.socket.on(`jump_${this.name}`, () => {   
         this.animate.setAnimation("JUMP");
+        this.animate.reset();
         this.animate.start();
         this.jumping = true;
         setTimeout(() => {
             this.sy = -9;
-            this.gravity = 0.3;
+            this.gravity = gravity;
         }, 200)
     })
 
@@ -205,7 +215,6 @@ Sina.prototype.idle = function () {
 Sina.prototype.run = function () {
     this.runing = 0;
     this.sx += this.runS;
-    console.log("runS ",this.sx);
 }
 Sina.prototype.walk = function () {
     if(this.walking) {
@@ -237,12 +246,7 @@ Sina.prototype.dash = function () {
     this.walking = true;
 }
 Sina.prototype.jump = function () {
-    if (this.jumping) {
-        // if (this.y <= 700) {
-        //     this.sy = this.sy * -1;
-        //     this.jumping = false
-        // }
-    }
+    
     if (this.y + (this.h / 2) >= innerHeight) {
         this.gravity = 0;
         this.sy = 0;
@@ -251,9 +255,6 @@ Sina.prototype.jump = function () {
         this.idle();
     }
 
-    setTimeout(() => {
-
-    }, 100)
 }
 Sina.prototype.update = function () {
     this.jump();

@@ -9,6 +9,5 @@ export default function imageTest() {
     sinaImage.addEventListener("load",()=> {
 
         canvas.ctx.drawImage(sinaImage,0,0,100,100);
-        console.log(sinaImage)
     })
 }
