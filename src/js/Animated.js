@@ -1,6 +1,7 @@
 
 import Vector from "./Vector.js";
 
+
 function getPercentage(a = 100,b = 20) {
     return (a/100)*b;
 }
@@ -9,9 +10,10 @@ function Frame(name = "",frame = new Vector(0,0,0,0),frameNum = 0) {
     this.name = name;
     this.frame = frame;
     this.frameNum = frameNum;
+   
 }
 
-function Animation(name = "",frames = [new Frame()],duration = 100,loop = false) {
+function Animation(name = "",frames = [new Frame()],duration = 100,loop = false,calback = ()=> {}) {
     this.name = name;
     this.frames = frames;
     this.duration = duration;
@@ -21,6 +23,7 @@ function Animation(name = "",frames = [new Frame()],duration = 100,loop = false)
     this.frameIndex = 0;
     this.frame = frames[this.frameIndex];
     this.frames = frames;
+    this.calback = calback;
 }
 
 function Animated(animations = [new Animation()]) {
@@ -41,6 +44,8 @@ Animated.prototype.stop = function() {
     this.selectedAnimation.permission = false;
 }
 Animated.prototype.reset = function() {
+    if(!this.selectedAnimation.loop)
+        this.selectedAnimation.permission;
     this.selectedAnimation.frameNum = 0;
 }
 Animated.prototype.getFrame = function() {
@@ -61,6 +66,8 @@ Animated.prototype.run = function() {
         if(!this.selectedAnimation.loop)
             this.selectedAnimation.permission = false;
     }
+    this.c
+    this.selectedAnimation.calback(this.selectedAnimation.frameNum);
 }
 
 export {Animated,Animation,Frame,getPercentage}
