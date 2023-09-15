@@ -2,11 +2,13 @@ import { Animated, Animation, Frame } from "./Animated.js";
 import canvas from "./Canvas.js";
 import Vector from "./Vector.js";
 
-const sinaImage = new Image();
-sinaImage.src = "../../aseets/sprites/ghost.png";
 
-export default function Sina(x = 0, y = 0, sx = 1, sy = 10, w = 0, h = 0, socket) {
-    console.log(socket)
+export default function Sina(name = "sina",look = "RIGHT", x = 0, y = 0, sx = 1, sy = 10, w = 0, h = 0, socket) {
+    this.image = new Image();
+    this.image.src = `../../aseets/sprites/${name}.png`;
+    this.socket = socket;
+    this.user = JSON.parse(localStorage.getItem("user"));
+    this.name = name;
     this.animate = new Animated([
         new Animation("IDLE", [
             new Frame("F1", new Vector(7, 4, 16, 28), 0),
@@ -63,7 +65,7 @@ export default function Sina(x = 0, y = 0, sx = 1, sy = 10, w = 0, h = 0, socket
     this.sx = sx;
     this.sy = sy;
     this.look = {
-        look: "RIGHT",
+        look: look,
         left: "LEFT",
         right: "RIGHT"
     };
@@ -75,12 +77,12 @@ export default function Sina(x = 0, y = 0, sx = 1, sy = 10, w = 0, h = 0, socket
         console.log(e.keyCode)
         switch (e.keyCode) {
             case 39:
-                if (!this.walking)
-                    socket.emit("walk_right");
+                if (!this.walking && this.name == this.user.name)
+                    socket.emit(`walk_right`,this.name);
                 break;
             case 37:
-                if (!this.walking) 
-                    socket.emit("walk_left");
+                if (!this.walking && this.name == this.user.name)
+                    socket.emit(`walk_left`,this.name);
                 break;
             case 16:
                 this.dash();
@@ -95,44 +97,59 @@ export default function Sina(x = 0, y = 0, sx = 1, sy = 10, w = 0, h = 0, socket
     window.addEventListener("keyup", (e) => {
         switch (e.keyCode) {
             case 39:
-                socket.emit("walk_stop");
+                if (this.user.name == this.name)
+                    socket.emit(`walk_stop`,this.name, this.x);
                 break;
             case 37:
-                socket.emit("walk_stop");
+                if (this.user.name == this.name)
+                    socket.emit(`walk_stop`,this.name, this.x);
                 break;
             case 32:
-                this.animate.setAnimation("JUMP");
-                this.animate.start();
-                this.jumping = true;
-                setTimeout(() => {
-                    this.sy = -9;
-                    this.gravity = 0.3;
-                }, 200)
+                if (this.user.name == this.name)
+                    socket.emit("jump",this.name);
+
                 //this.sy = this.sy * -1;
                 break;
         }
     })
-    socket.on("walk_right", () => {
+    socket.on(`walk_right_${this.name}`, () => {
         this.look.look = this.look.right;
         this.animate.setAnimation("WALK");
         this.animate.start();
         this.run();
         this.walking = true;
     })
-    socket.on("walk_left", () => {
+    socket.on(`walk_left_${this.name}`, () => {
         this.look.look = this.look.left;
         this.animate.setAnimation("WALK");
         this.animate.start();
         this.run();
         this.walking = true;
     })
-    socket.on("walk_stop", () => {
+    socket.on(`walk_stop_${this.name}`, (x) => {
 
         this.walking = false;
         this.animate.setAnimation("IDLE");
         this.animate.start();
         this.sx = sx;
+        this.x = x;
     })
+    socket.on(`run_${this.name}`, () => {
+        this.runing = true;
+    })
+    socket.on(`run_stop_${this.name}`, () => {
+        this.runing = false;
+    })
+    socket.on(`jump_${this.name}`, () => {
+        this.animate.setAnimation("JUMP");
+        this.animate.start();
+        this.jumping = true;
+        setTimeout(() => {
+            this.sy = -9;
+            this.gravity = 0.3;
+        }, 200)
+    })
+
     this.idle();
 
 
@@ -141,10 +158,10 @@ Sina.prototype.draw = function () {
     canvas.ctx.save()
     if (this.look.look == this.look.left) {
         canvas.ctx.scale(-1, 1);
-        canvas.ctx.drawImage(sinaImage, this.animate.getFrame().x, this.animate.getFrame().y, this.animate.getFrame().w, this.animate.getFrame().h, -(this.x + (this.w / 2)), this.y - (this.h / 2), this.w, this.h);
+        canvas.ctx.drawImage(this.image, this.animate.getFrame().x, this.animate.getFrame().y, this.animate.getFrame().w, this.animate.getFrame().h, -(this.x + (this.w / 2)), this.y - (this.h / 2), this.w, this.h);
     }
     else
-        canvas.ctx.drawImage(sinaImage, this.animate.getFrame().x, this.animate.getFrame().y, this.animate.getFrame().w, this.animate.getFrame().h, this.x - (this.w / 2), this.y - (this.h / 2), this.w, this.h);
+        canvas.ctx.drawImage(this.image, this.animate.getFrame().x, this.animate.getFrame().y, this.animate.getFrame().w, this.animate.getFrame().h, this.x - (this.w / 2), this.y - (this.h / 2), this.w, this.h);
     // canvas.ctx.drawImage(sinaImage,7, 132, 22, 28,400,400,120,150);
     // canvas.ctx.strokeRect(400,400,120,150);
     // canvas.ctx.drawImage(sinaImage,38, 132, 22, 28,400+120,400,120,150);
@@ -173,12 +190,12 @@ Sina.prototype.run = function () {
         this.animate.setAnimation("RUN");
         this.animate.start();
     }
-    if (!this.runing)
-        this.runing = true;
-
+    if (!this.runing && this.user.name == this.name)
+        this.socket.emit(`run`,this.name);
     setTimeout(() => {
-        this.runing = false;
-    }, 400)
+        if (this.user.name == this.name)
+            this.socket.emit(`run_stop`,this.name);
+    }, 800)
 }
 Sina.prototype.walk = function () {
     if (this.walking) {
