@@ -5,7 +5,7 @@ import Vector from "./Vector.js";
 const sinaImage = new Image();
 sinaImage.src = "../../aseets/sprites/ghost.png";
 
-export default function Sina(x = 0, y = 0, sx = 1, sy = 10, w = 0, h = 0,socket) {
+export default function Sina(x = 0, y = 0, sx = 1, sy = 10, w = 0, h = 0, socket) {
     console.log(socket)
     this.animate = new Animated([
         new Animation("IDLE", [
@@ -75,34 +75,18 @@ export default function Sina(x = 0, y = 0, sx = 1, sy = 10, w = 0, h = 0,socket)
         console.log(e.keyCode)
         switch (e.keyCode) {
             case 39:
-                socket.emit("walk_right");
-                if (!this.walking) {
-                socket.on("walk_right",()=> {
-                    this.look.look = this.look.right;
-                        this.animate.setAnimation("WALK");
-                        this.animate.start();
-                        this.run();
-                        this.walking = true;
-                    })
-                }
+                if (!this.walking)
+                    socket.emit("walk_right");
                 break;
             case 37:
-                socket.emit("walk_left");
-                if (!this.walking) {
-                socket.on("walk_left",()=> {
-                    this.look.look = this.look.left;
-                        this.animate.setAnimation("WALK");
-                        this.animate.start();
-                        this.run();
-                        this.walking = true;
-                    })
-                }
+                if (!this.walking) 
+                    socket.emit("walk_left");
                 break;
             case 16:
                 this.dash();
                 break;
             case 32:
-              
+
 
                 break;
 
@@ -111,41 +95,44 @@ export default function Sina(x = 0, y = 0, sx = 1, sy = 10, w = 0, h = 0,socket)
     window.addEventListener("keyup", (e) => {
         switch (e.keyCode) {
             case 39:
-                socket.emit("walk_stop_right");
-                socket.on("walk_stop_right",()=>  {
-
-                    this.walking = false;
-                    this.animate.setAnimation("IDLE");
-                    this.animate.start();
-                    this.sx = sx;
-                })
-
+                socket.emit("walk_stop");
                 break;
             case 37:
-                socket.emit("walk_stop_left");
-                socket.on("walk_stop_reft",()=>  {
-
-                    this.walking = false;
-                    this.animate.setAnimation("IDLE");
-                    this.animate.start();
-                    this.sx = sx;
-                })
-
+                socket.emit("walk_stop");
                 break;
             case 32:
                 this.animate.setAnimation("JUMP");
                 this.animate.start();
                 this.jumping = true;
-                setTimeout(()=> {
+                setTimeout(() => {
                     this.sy = -9;
                     this.gravity = 0.3;
-                },200)
+                }, 200)
                 //this.sy = this.sy * -1;
                 break;
         }
     })
+    socket.on("walk_right", () => {
+        this.look.look = this.look.right;
+        this.animate.setAnimation("WALK");
+        this.animate.start();
+        this.run();
+        this.walking = true;
+    })
+    socket.on("walk_left", () => {
+        this.look.look = this.look.left;
+        this.animate.setAnimation("WALK");
+        this.animate.start();
+        this.run();
+        this.walking = true;
+    })
+    socket.on("walk_stop", () => {
 
-
+        this.walking = false;
+        this.animate.setAnimation("IDLE");
+        this.animate.start();
+        this.sx = sx;
+    })
     this.idle();
 
 
@@ -229,7 +216,7 @@ Sina.prototype.jump = function () {
         //     this.jumping = false
         // }
     }
-    if(this.y + (this.h / 2) >= innerHeight) {
+    if (this.y + (this.h / 2) >= innerHeight) {
         this.gravity = 0;
         this.sy = 0;
         this.y = innerHeight - (this.h / 2) - 1;
@@ -245,7 +232,7 @@ Sina.prototype.update = function () {
     this.jump();
     this.y += this.sy;
     this.sy += this.gravity;
-    if(canvas.frame % 2  == 0) {
+    if (canvas.frame % 2 == 0) {
     }
     //this.idle();
     this.walk();

@@ -27,12 +27,10 @@ io.on("connection",(client)=> {
     client.on("walk_left",()=> {
         io.emit("walk_left");
     })
-    client.on("walk_stop_right",()=> {
-        io.emit("walk_stop_right");
+    client.on("walk_stop",()=> {
+        io.emit("walk_stop");
     })
-    client.on("walk_stop_left",()=> {
-        io.emit("walk_stop_left");
-    })
+   
 
 
     client.on("disconnect",()=> {
