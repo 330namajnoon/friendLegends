@@ -1,17 +1,12 @@
 import { Animated, Animation, Frame } from "./Animated.js";
 import canvas from "./Canvas.js";
+import { crash,CrashObject } from "./Crash.js";
 import Vector from "./Vector.js";
-import { Crash } from "./Crash.js";
+
 
 
 export default function Sina(name = "sina", look = "RIGHT", x = 0, y = 0, sx = 1, sy = 10, runS = 2.5,gravity = 0.3, w = 0, h = 0) {
-    this.crash = new Crash([
-        new Vector(0,200,10,200),
-    ]);
-    this.crash1 = new Crash([
-        new Vector(100,0,100,200),
-    ]);
-    console.log(this.crash.crashed(this.crash1));
+    
     
     this.image = new Image();
     this.image.src = `../../aseets/sprites/${name}.png`;
@@ -26,14 +21,14 @@ export default function Sina(name = "sina", look = "RIGHT", x = 0, y = 0, sx = 1
             new Frame("F5", new Vector(39, 4, 16, 28), 80),
             new Frame("F6", new Vector(39, 36, 16, 28), 90),
         ], 150, true),
-
+        
         new Animation("WALK", [
             new Frame("F1", new Vector(6, 68, 18, 28), 0),
             new Frame("F2", new Vector(39, 68, 18, 28), 25),
             new Frame("F3", new Vector(71, 68, 18, 28), 50),
             new Frame("F4", new Vector(103, 68, 18, 28), 75),
         ], 30 / sx, true),
-
+        
         new Animation("RUN", [
             new Frame("F1", new Vector(6, 100, 17, 29), 0),
             new Frame("F2", new Vector(39, 100, 16, 29), 12),
@@ -61,15 +56,16 @@ export default function Sina(name = "sina", look = "RIGHT", x = 0, y = 0, sx = 1
             new Frame("F6", new Vector(166, 164, 19, 28), 62),
             new Frame("F7", new Vector(198, 164, 19, 28), 75),
             new Frame("F8", new Vector(230, 164, 19, 28), 87),
-
+            
         ], gravity * 300),
     ]);
     this.animate.start();
     this.selectedFrame = this.min;
-    this.x = x;
-    this.y = y;
-    this.w = w;
-    this.h = h;
+    this.pos = new Vector(x,y,w,h);
+    this.crash = new CrashObject(this.pos,w / 2,h / 2,()=> {
+        console.log("h")
+    });
+    crash.add(this.crash);
     this.sx = sx;
     this.sy = sy;
     this.runS = runS;
@@ -127,11 +123,11 @@ export default function Sina(name = "sina", look = "RIGHT", x = 0, y = 0, sx = 1
         switch (e.keyCode) {
             case 39:
                 if (this.user.name == this.name)
-                    canvas.socket.emit(`walk_stop`, this.name, this.x);
+                    canvas.socket.emit(`walk_stop`, this.name, this.pos.x);
                 break;
             case 37:
                 if (this.user.name == this.name)
-                    canvas.socket.emit(`walk_stop`, this.name, this.x);
+                    canvas.socket.emit(`walk_stop`, this.name, this.pos.x);
                 break;
             case 32:
                 if (this.user.name == this.name)
@@ -157,7 +153,7 @@ export default function Sina(name = "sina", look = "RIGHT", x = 0, y = 0, sx = 1
         this.animate.setAnimation("IDLE");
         this.animate.start();
         this.sx = sx;
-        this.x = x;
+        this.pos.x = x;
         this.walking = false;
     })
     canvas.socket.on(`run_${this.name}`, () => {
@@ -182,13 +178,15 @@ export default function Sina(name = "sina", look = "RIGHT", x = 0, y = 0, sx = 1
     this.idle();
 }
 Sina.prototype.draw = function () {
+   
+    canvas.ctx.beginPath();
     canvas.ctx.save()
     if (this.look.look == this.look.left) {
         canvas.ctx.scale(-1, 1);
-        canvas.ctx.drawImage(this.image, this.animate.getFrame().x, this.animate.getFrame().y, this.animate.getFrame().w, this.animate.getFrame().h, -(this.x + (this.w / 2)), this.y - (this.h / 2), this.w, this.h);
+        canvas.ctx.drawImage(this.image, this.animate.getFrame().x, this.animate.getFrame().y, this.animate.getFrame().w, this.animate.getFrame().h, -(this.pos.x + (this.pos.w / 2)), this.pos.y - (this.pos.h / 2), this.pos.w, this.pos.h);
     }
     else
-        canvas.ctx.drawImage(this.image, this.animate.getFrame().x, this.animate.getFrame().y, this.animate.getFrame().w, this.animate.getFrame().h, this.x - (this.w / 2), this.y - (this.h / 2), this.w, this.h);
+        canvas.ctx.drawImage(this.image, this.animate.getFrame().x, this.animate.getFrame().y, this.animate.getFrame().w, this.animate.getFrame().h, this.pos.x - (this.pos.w / 2), this.pos.y - (this.pos.h / 2), this.pos.w, this.pos.h);
     // canvas.ctx.drawImage(sinaImage,7, 132, 22, 28,400,400,120,150);
     // canvas.ctx.strokeRect(400,400,120,150);
     // canvas.ctx.drawImage(sinaImage,38, 132, 22, 28,400+120,400,120,150);
@@ -202,7 +200,7 @@ Sina.prototype.draw = function () {
     // canvas.ctx.drawImage(sinaImage,166, 132, 22, 28,400+120*5,400,120,150);
     // canvas.ctx.strokeRect(400+120*5,400,120,150);
     // canvas.ctx.beginPath();
-    // canvas.ctx.arc(this.x, this.y, 5, 0, 2 * Math.PI);
+    // canvas.ctx.arc(this.pos.x, this.pos.y, 5, 0, 2 * Math.PI);
     // canvas.ctx.fillStyle = "#000000";
     // canvas.ctx.fill();
     // canvas.ctx.stroke();
@@ -219,27 +217,27 @@ Sina.prototype.run = function () {
 Sina.prototype.walk = function () {
     if(this.walking) {
         if (this.look.look == this.look.left) {
-            if (this.x - (this.w / 2) > 0)
-                this.x -= this.sx;
+            if (this.pos.x - (this.pos.w / 2) > 0)
+                this.pos.x -= this.sx;
         }
         else {
-            if (this.x + (this.w / 2) < innerWidth)
-                this.x += this.sx;
+            if (this.pos.x + (this.pos.w / 2) < innerWidth)
+                this.pos.x += this.sx;
         }
     }
 }
 Sina.prototype.dash = function () {
-
+    this.animate.reset();
     this.animate.setAnimation("DASH");
     this.animate.start();
     setTimeout(() => {
 
-        this.sx = 100;
+        this.sx *= 100;
     }, 500)
     setTimeout(() => {
         this.walking = false;
         this.animate.setAnimation("IDLE");
-        this.sx = 1;
+        this.sx /= 100;
 
     }, 600)
 
@@ -247,10 +245,10 @@ Sina.prototype.dash = function () {
 }
 Sina.prototype.jump = function () {
     
-    if (this.y + (this.h / 2) >= innerHeight) {
+    if (this.pos.y + (this.pos.h / 2) >= innerHeight) {
         this.gravity = 0;
         this.sy = 0;
-        this.y = innerHeight - (this.h / 2) - 1;
+        this.pos.y = innerHeight - (this.pos.h / 2) - 1;
         this.animate.stop();
         this.idle();
     }
@@ -258,7 +256,7 @@ Sina.prototype.jump = function () {
 }
 Sina.prototype.update = function () {
     this.jump();
-    this.y += this.sy;
+    this.pos.y += this.sy;
     this.sy += this.gravity;
     this.walk();
     this.animate.run();
