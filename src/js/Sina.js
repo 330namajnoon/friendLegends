@@ -1,13 +1,13 @@
 import { Animated, Animation, Frame } from "./Animated.js";
 import canvas from "./Canvas.js";
-import { crash,CrashObject } from "./Crash.js";
+import { crash, CrashObject } from "./Crash.js";
 import Vector from "./Vector.js";
 
 
 
-export default function Sina(name = "sina", look = "RIGHT", x = 0, y = 0, sx = 1, sy = 10, runS = 2.5,gravity = 0.3, w = 0, h = 0) {
-    
-    
+export default function Sina(name = "sina", look = "RIGHT", x = 0, y = 0, sx = 1, sy = 10, runS = 2.5, gravity = 0.3, w = 0, h = 0) {
+
+
     this.image = new Image();
     this.image.src = `../../aseets/sprites/${name}.png`;
     this.user = JSON.parse(localStorage.getItem("user"));
@@ -21,14 +21,14 @@ export default function Sina(name = "sina", look = "RIGHT", x = 0, y = 0, sx = 1
             new Frame("F5", new Vector(39, 4, 16, 28), 80),
             new Frame("F6", new Vector(39, 36, 16, 28), 90),
         ], 150, true),
-        
+
         new Animation("WALK", [
             new Frame("F1", new Vector(6, 68, 18, 28), 0),
             new Frame("F2", new Vector(39, 68, 18, 28), 25),
             new Frame("F3", new Vector(71, 68, 18, 28), 50),
             new Frame("F4", new Vector(103, 68, 18, 28), 75),
         ], 30 / sx, true),
-        
+
         new Animation("RUN", [
             new Frame("F1", new Vector(6, 100, 17, 29), 0),
             new Frame("F2", new Vector(39, 100, 16, 29), 12),
@@ -38,7 +38,7 @@ export default function Sina(name = "sina", look = "RIGHT", x = 0, y = 0, sx = 1
             new Frame("F6", new Vector(167, 100, 16, 29), 62),
             new Frame("F7", new Vector(199, 100, 16, 29), 75),
             new Frame("F8", new Vector(231, 100, 16, 29), 87),
-        ], 80 / runS, true,(frame)=> {this.walk(frame)}),
+        ], 80 / runS, true, (frame) => { this.walk(frame) }),
         new Animation("DASH", [
             new Frame("F1", new Vector(7, 132, 22, 28), 0),
             new Frame("F2", new Vector(38, 132, 22, 28), 16),
@@ -56,14 +56,20 @@ export default function Sina(name = "sina", look = "RIGHT", x = 0, y = 0, sx = 1
             new Frame("F6", new Vector(166, 164, 19, 28), 62),
             new Frame("F7", new Vector(198, 164, 19, 28), 75),
             new Frame("F8", new Vector(230, 164, 19, 28), 87),
-            
+
         ], gravity * 300),
     ]);
     this.animate.start();
     this.selectedFrame = this.min;
-    this.pos = new Vector(x,y,w,h);
-    this.crash = new CrashObject(this.pos,w / 2,h / 2,()=> {
-        console.log("h")
+    this.pos = new Vector(x, y, w, h);
+    this.crash = new CrashObject(this,this.pos, w / 2, h / 2,5,([i, j],object,object2 = new CrashObject()) => {
+        if (i == 3 && j == 1)
+            this.pos.x = (object2.pos.x - this.pos.w);
+       
+        if(i == 1 && j == 3)
+            this.pos.x = (object2.pos.x + this.pos.w);
+        if(i == 0 && j == 2)
+            this.pos.y = (object2.pos.y + this.pos.h);
     });
     crash.add(this.crash);
     this.sx = sx;
@@ -90,7 +96,7 @@ export default function Sina(name = "sina", look = "RIGHT", x = 0, y = 0, sx = 1
                         this.runing = canvas.frame;
                     else {
                         if (this.name == this.user.name) {
-                            if(canvas.frame - this.runing < 80)
+                            if (canvas.frame - this.runing < 20)
                                 canvas.socket.emit(`run`, this.name);
                             else
                                 this.runing = 0;
@@ -100,11 +106,11 @@ export default function Sina(name = "sina", look = "RIGHT", x = 0, y = 0, sx = 1
                 case 37:
                     if (this.name == this.user.name)
                         canvas.socket.emit(`walk_left`, this.name);
-                        if (this.runing == 0)
+                    if (this.runing == 0)
                         this.runing = canvas.frame;
                     else {
                         if (this.name == this.user.name) {
-                            if(canvas.frame - this.runing < 80)
+                            if (canvas.frame - this.runing < 20)
                                 canvas.socket.emit(`run`, this.name);
                             else
                                 this.runing = 0;
@@ -164,7 +170,7 @@ export default function Sina(name = "sina", look = "RIGHT", x = 0, y = 0, sx = 1
     canvas.socket.on(`run_stop_${this.name}`, () => {
         this.sx -= this.runS;
     })
-    canvas.socket.on(`jump_${this.name}`, () => {   
+    canvas.socket.on(`jump_${this.name}`, () => {
         this.animate.setAnimation("JUMP");
         this.animate.reset();
         this.animate.start();
@@ -178,7 +184,7 @@ export default function Sina(name = "sina", look = "RIGHT", x = 0, y = 0, sx = 1
     this.idle();
 }
 Sina.prototype.draw = function () {
-   
+
     canvas.ctx.beginPath();
     canvas.ctx.save()
     if (this.look.look == this.look.left) {
@@ -215,7 +221,7 @@ Sina.prototype.run = function () {
     this.sx += this.runS;
 }
 Sina.prototype.walk = function () {
-    if(this.walking) {
+    if (this.walking) {
         if (this.look.look == this.look.left) {
             if (this.pos.x - (this.pos.w / 2) > 0)
                 this.pos.x -= this.sx;
@@ -244,7 +250,7 @@ Sina.prototype.dash = function () {
     this.walking = true;
 }
 Sina.prototype.jump = function () {
-    
+
     if (this.pos.y + (this.pos.h / 2) >= innerHeight) {
         this.gravity = 0;
         this.sy = 0;

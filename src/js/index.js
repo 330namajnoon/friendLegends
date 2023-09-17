@@ -1,8 +1,10 @@
 
+import Back from "./Back.js";
 import canvas from "./Canvas.js";
 import { crash } from "./Crash.js";
 import Pelota from "./Pelota.js";
 import Sina from "./Sina.js";
+import Test from "./TestLines.js";
 import imageTest from "./imageTest.js";
 
 //const username = prompt("Como te llamas?");
@@ -13,9 +15,9 @@ imageTest();
 
 //const sina = new Sina(100,100,1,1,60,96);
 
+const back = new Back(0,0,innerWidth,innerHeight);
+const sina = new Sina("sina","RIGHT",500,600,1,5,3,0.3,70,110);
+const david = new Sina("david","LEFT",800,600,1,5,3,1,70,110);
 
-const sina = new Sina("sina","RIGHT",200,910,1,5,3,0.3,70,110);
-const david = new Sina("david","LEFT",600,910,1,5,3,1,70,110);
-
-canvas.addNewObject([sina,david,crash]);
+canvas.addNewObject([back,sina,david,crash]);
 canvas.anim();
