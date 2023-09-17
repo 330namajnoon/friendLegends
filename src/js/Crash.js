@@ -1,98 +1,61 @@
 import canvas from "./Canvas.js";
-import Vector from "./Vector.js";
+import Sina from "./Sina.js";
+import Vector, { VectorXY } from "./Vector.js";
 
-function CrashObject(object,pos = new Vector(),orgX = 10,orgY = 10,lineW = 5,calBack) {
-    this.object = object;
-    this.pos = pos;
-    this.orgX = orgX;
-    this.orgY = orgY;
-    this.polygons = [
-        new Vector(),
-        new Vector(),
-        new Vector(),
-        new Vector()
-    ]
-    this.calBack = calBack;
-    this.lineW = lineW;
+function Polygon(target,type = "SINA",org = new VectorXY(10,10),points = [new VectorXY(0,0),new VectorXY(100,100)],calBack) {
+	console.log(target);
+	this.target = target;
+	this.org = org;
+	this.points = points;
+	this.pointsStory = JSON.parse(JSON.stringify(points));
+	this.calBack = calBack;
+	this.id = 0;
+	window.addEventListener("click",()=> {
+		this.setPointsPOS();
+	})
+	console.log(this.pointsStory)
 }
-   
-CrashObject.prototype.draw = function() {
-    canvas.ctx.beginPath();
-    canvas.ctx.rect(this.polygons[0].x,this.polygons[0].y,this.polygons[0].w,this.polygons[0].h);
-    canvas.ctx.rect(this.polygons[1].x,this.polygons[1].y,this.polygons[1].w,this.polygons[1].h);
-    canvas.ctx.rect(this.polygons[2].x,this.polygons[2].y,this.polygons[2].w,this.polygons[2].h);
-    canvas.ctx.rect(this.polygons[3].x,this.polygons[3].y,this.polygons[3].w,this.polygons[3].h);
-    canvas.ctx.stroke();
+Polygon.prototype.setID = function(id = 0) {
+	this.id = id;
 }
-CrashObject.prototype.update = function() {
-    this.polygons[0].x = this.pos.x - this.orgX + this.lineW;
-    this.polygons[0].y = this.pos.y - this.orgY;
-    this.polygons[0].w = this.pos.w - (this.lineW * 2);
-    this.polygons[0].h = this.lineW;
-
-    this.polygons[1].x = this.pos.x - this.orgX;
-    this.polygons[1].y = this.pos.y - this.orgY + this.lineW;
-    this.polygons[1].w = this.lineW;
-    this.polygons[1].h = this.pos.h - (this.lineW * 2);
-
-    this.polygons[3].x = this.pos.x + this.orgX - this.lineW;
-    this.polygons[3].y = this.pos.y - this.orgY + this.lineW;
-    this.polygons[3].w = this.lineW;
-    this.polygons[3].h = this.pos.h - (this.lineW * 2);
-
-    this.polygons[2].x = this.pos.x - this.orgX + this.lineW;
-    this.polygons[2].y = this.pos.y + this.orgY - this.lineW;
-    this.polygons[2].w = this.pos.w - (this.lineW * 2);
-    this.polygons[2].h = this.lineW;
-
-}
-CrashObject.prototype.crashed = function(crashObject = new CrashObject()) {
-    this.polygons.forEach((p,index)=> {
-       crashObject.polygons.forEach((p1,index1)=> {
-            if(p.x < (p1.x + p1.w) && (p.x + p.w) > p1.x && p.y < (p1.y + p1.h) && (p.y + p.h) > p1.y ) {
-                this.calBack([index,index1],this,crashObject);
-                return;
-            }
-       })
-    })
-    return null;
+Polygon.prototype.setPointsPOS = function() {
+	
+	this.points.forEach((p,i) => {
+		
+		p.x = this.target.pos.x + this.pointsStory[i].x;
+		p.x = this.target.pos.y + this.pointsStory[i].y;
+	})
+	console.log(this.pointsStory)
+	console.log(this.points)
 }
 function Crash() {
-    this.polygons = [];
-    window.addEventListener("click",()=> {
-        this.crashed();
-        })
-}
-Crash.prototype.add = function(object = new Vector()) {
-    this.polygons.unshift(object);
+	this.polygons = [];
+	console.log(this.polygons);
+
 }
 Crash.prototype.draw = function() {
-    this.polygons.forEach(p => {
-        p.draw();
-    })
-}
-Crash.prototype.crashed = function() {
-    this.polygons.forEach((p,index)=> {
-        this.polygons.forEach((p1,index1) => {
-            if(index != index1) {
-                let res = p.crashed(p1);
-                if(res)
-                    console.log(res)
-
-                
-            }
-        })
-    })
+	this.polygons.forEach(p => {
+		canvas.ctx.beginPath();
+		p.points.forEach(po => {
+			canvas.ctx.lineTo(po.x,po.y);
+		})
+		canvas.ctx.stroke();
+	})
 }
 Crash.prototype.update = function() {
-    this.polygons.forEach(p => {
-        p.update();
-    })
-
-    this.crashed();
+	// this.polygons.forEach(p => {
+	// 	p.setPointsPOS();
+	// })
 }
-
-
+Crash.prototype.add = function(polygon = new Polygon()) {
+	polygon.setID(this.polygons.length);
+	this.polygons.unshift(polygon);
+}
+Crash.prototype.getPolygonByID = function(id = 0) {
+	this.polygons.forEach(p => {
+		if(p.id == id) return p;
+	})
+}
 const crash = new Crash();
 
-export {crash,CrashObject};
+export {crash,Polygon};

@@ -1,7 +1,7 @@
 import { Animated, Animation, Frame } from "./Animated.js";
 import canvas from "./Canvas.js";
-import { crash, CrashObject } from "./Crash.js";
-import Vector from "./Vector.js";
+import { crash, Polygon } from "./Crash.js";
+import Vector,{VectorXY} from "./Vector.js";
 
 
 
@@ -62,16 +62,13 @@ export default function Sina(name = "sina", look = "RIGHT", x = 0, y = 0, sx = 1
     this.animate.start();
     this.selectedFrame = this.min;
     this.pos = new Vector(x, y, w, h);
-    this.crash = new CrashObject(this,this.pos, w / 2, h / 2,5,([i, j],object,object2 = new CrashObject()) => {
-        if (i == 3 && j == 1)
-            this.pos.x = (object2.pos.x - this.pos.w);
-       
-        if(i == 1 && j == 3)
-            this.pos.x = (object2.pos.x + this.pos.w);
-        if(i == 0 && j == 2)
-            this.pos.y = (object2.pos.y + this.pos.h);
-    });
-    crash.add(this.crash);
+    this.polygonCrash = new Polygon(this,"Sina",new VectorXY(this.pos.w / 2,this.pos.h / 2),[
+        new VectorXY(0,100),
+        new VectorXY(this.pos.w,100),  
+    ],()=> {
+        console.log("Sina Crashed!!");
+    })
+    crash.add(this.polygonCrash);
     this.sx = sx;
     this.sy = sy;
     this.runS = runS;
