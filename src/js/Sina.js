@@ -63,10 +63,13 @@ export default function Sina(name = "sina", look = "RIGHT", x = 0, y = 0, sx = 1
     this.selectedFrame = this.min;
     this.pos = new Vector(x, y, w, h);
     this.polygonCrash = new Polygon(this,"Sina",new VectorXY(this.pos.w / 2,this.pos.h / 2),[
-        new VectorXY(0,100),
-        new VectorXY(this.pos.w,100),  
+        new VectorXY(0,0),
+        new VectorXY(this.pos.w, 0 ),
+        new VectorXY(this.pos.w, this.pos.h),
+        new VectorXY(0, this.pos.h),
+        new VectorXY(0, 0),
     ],()=> {
-        console.log("Sina Crashed!!");
+        console.log("Sina Crashed!!"); 
     })
     crash.add(this.polygonCrash);
     this.sx = sx;
@@ -259,8 +262,8 @@ Sina.prototype.jump = function () {
 }
 Sina.prototype.update = function () {
     this.jump();
-    this.pos.y += this.sy;
-    this.sy += this.gravity;
+    //this.pos.y += this.sy;
+    //this.sy += this.gravity;
     this.walk();
     this.animate.run();
 }
