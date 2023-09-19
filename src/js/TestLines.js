@@ -5,16 +5,16 @@ export default function Test(){
     this.lines = [
         {
             x1:0,
-            y1:0,
-            x2:60,
-            y2:50,
+            y1:100,
+            x2:200,
+            y2:100,
         },
         {
             x1:100,
             y1:0,
-            x2:0,
-            y2:100,
-        }
+            x2:101,
+            y2:220,
+        },
     ]
 }
 Test.prototype.crash = function (x1,y1,x2,y2,x3,y3,x4,y4) {

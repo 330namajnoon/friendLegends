@@ -45,21 +45,17 @@ Polygon.prototype.isCrashed = function (x1, y1, x2, y2, x3, y3, x4, y4) {
 		return null;
 	}
 }
-Polygon.prototype.crashed = function (polygon = new Polygon()) {
-	let i = 0;
-	let j = 2;
-
-	console.log();
+Polygon.prototype.crashed = function (polygon = new Polygon()) {	
 	this.points.forEach((p, i) => {
 		if (i < this.points.length - 1) {
 			polygon.points.forEach((p1, j) => {
 				if (j < polygon.points.length - 1) {
-					let x1 = this.points[i].x;
-					let y1 = this.points[i].y;
+					let x1 = p.x;
+					let y1 = p.y;
 					let x2 = this.points[i + 1].x;
 					let y2 = this.points[i + 1].y;
-					let x3 = polygon.points[j].x;
-					let y3 = polygon.points[i].y;
+					let x3 = p1.x;
+					let y3 = p1.y;
 					let x4 = polygon.points[j + 1].x;
 					let y4 = polygon.points[j + 1].y;
 					let res = this.isCrashed(x1, y1, x2, y2, x3, y3, x4, y4);
