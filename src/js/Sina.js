@@ -5,13 +5,14 @@ import Vector,{VectorXY} from "./Vector.js";
 
 
 
-export default function Sina(name = "sina", look = "RIGHT", x = 0, y = 0, sx = 1, sy = 10, runS = 2.5, gravity = 0.3, w = 0, h = 0) {
-
+export default function Sina(name = "sina",type = "Sina", look = "RIGHT", x = 0, y = 0, sx = 1, sy = 10, runS = 2.5, gravity = 0.3, w = 0, h = 0) {
+    this.in = true;
 
     this.image = new Image();
     this.image.src = `../../aseets/sprites/${name}.png`;
     this.user = JSON.parse(localStorage.getItem("user"));
     this.name = name;
+    this.type = type;
     this.animate = new Animated([
         new Animation("IDLE", [
             new Frame("F1", new Vector(7, 4, 16, 28), 0),
@@ -77,11 +78,12 @@ export default function Sina(name = "sina", look = "RIGHT", x = 0, y = 0, sx = 1
         new VectorXY(this.pos.w / 2,2),
       
     ],()=> {
-        console.log("Sina Crashed!!"); 
+        //console.log("Sina Crashed!!"); 
     })
     crash.add(this.polygonCrash);
     this.sx = sx;
     this.sy = sy;
+    this.syp = sy;
     this.runS = runS;
     this.look = {
         look: look,
@@ -92,6 +94,7 @@ export default function Sina(name = "sina", look = "RIGHT", x = 0, y = 0, sx = 1
     this.walking = false;
     this.runing = 0;
     this.jumping = false;
+    this.gravityp = gravity;
     this.gravity = 0;
     window.addEventListener("keydown", (e) => {
         console.log(e.keyCode)

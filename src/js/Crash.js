@@ -2,8 +2,7 @@ import canvas from "./Canvas.js";
 import Sina from "./Sina.js";
 import Vector, { VectorXY } from "./Vector.js";
 
-function Polygon(target, type = "SINA", org = new VectorXY(10, 10), points = [new VectorXY(0, 0), new VectorXY(100, 100)], calBack) {
-	console.log(target);
+function Polygon(target, type = "SINA", org = new VectorXY(10, 10), points = [new VectorXY(0, 0), new VectorXY(100, 100)], calBack = (target = ""||undefined,res = {line1:{x1:0,y1:0,x2:0,y2:0},line2:{x1:0,y1:0,x2:0,y2:0}})=> {}) {
 	this.target = target;
 	this.org = org;
 	this.points = points;
@@ -60,7 +59,7 @@ Polygon.prototype.crashed = function (polygon = new Polygon()) {
 					let y4 = polygon.points[j + 1].y;
 					let res = this.isCrashed(x1, y1, x2, y2, x3, y3, x4, y4);
 					if (res) {
-						this.calBack();
+						this.calBack(polygon.target,{line1:{x1,y1,x2,y2},line2:{x1:x3,y2:y3,x2:x4,y2:y4}});
 					}
 				}
 			})
@@ -73,13 +72,13 @@ function Crash() {
 
 }
 Crash.prototype.draw = function () {
-	this.polygons.forEach(p => {
-		canvas.ctx.beginPath();
-		p.points.forEach(po => {
-			canvas.ctx.lineTo(po.x, po.y);
-		})
-		canvas.ctx.stroke();
-	})
+	// this.polygons.forEach(p => {
+	// 	canvas.ctx.beginPath();
+	// 	p.points.forEach(po => {
+	// 		canvas.ctx.lineTo(po.x, po.y);
+	// 	})
+	// 	canvas.ctx.stroke();
+	// })
 }
 Crash.prototype.update = function () {
 	this.polygons.forEach(p => {
