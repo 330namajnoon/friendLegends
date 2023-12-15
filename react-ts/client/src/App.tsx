@@ -2,13 +2,7 @@ import "./App.css";
 import React, { Component, ReactNode, createRef, RefObject } from "react";
 import IAppState from "./Interfaces/IAppState";
 import GAMEENGINE from "./GameEngine";
-import Asset from "./GameEngine/Classes/Asset";
-import ImageEntity from "./GameEngine/Classes/ImageEntity";
-import Vector2 from "./GameEngine/Classes/Vector2";
-
-import Sprite from "./GameEngine/Classes/Sprite";
-import Vector6 from "./GameEngine/Classes/Vector6";
-import Animation from "./GameEngine/Classes/Animation";
+import ValkingMove from "./Scripts/ValkingMove";
 
 // function App() {
 //   const [appState, setAppState] = useState<IAppState>({gameEngine: null, isLoading: true});
@@ -51,35 +45,36 @@ class App extends Component<{}, IAppState> {
     vaking.src = "./assets/images/vaking.png";
     document.body.appendChild(vaking)
     const renderer = () => {
-      const backEntity = new ImageEntity(
+      const backEntity = new GAMEENGINE.ImageEntity(
         "back",
-        new Vector2(window.innerWidth / 2, window.innerHeight / 2),
+        new GAMEENGINE.Vector2(window.innerWidth / 2, window.innerHeight / 2),
         0,
-        new Vector2(window.innerWidth, window.innerHeight),
+        new GAMEENGINE.Vector2(window.innerWidth, window.innerHeight),
         "RIGHT",
         new GAMEENGINE.Animation(100, [
-          new Sprite(fondo1, new Vector6(0, 0, 400, 200, window.innerWidth / 2, window.innerHeight / 2), 100),
+          new GAMEENGINE.Sprite(fondo1, new GAMEENGINE.Vector6(0, 0, 400, 200, window.innerWidth / 2, window.innerHeight / 2), 100),
         ])
       );
       gamengine.entitys.addNewEntity(backEntity);
 
-      const vakingEntity = new ImageEntity(
+      const vakingEntity = new GAMEENGINE.ImageEntity(
         "vaking",
-        new Vector2(100, 100),
+        new GAMEENGINE.Vector2(100, 100),
         0,
-        new Vector2(100, 100),
+        new GAMEENGINE.Vector2(100, 100),
         "LEFT",
-        new Animation(100, [
-          new Sprite(vaking, new Vector6(64, 67, 100, 92, 50, 50), 100)
+        new GAMEENGINE.Animation(100, [
+          new GAMEENGINE.Sprite(vaking, new GAMEENGINE.Vector6(64, 67, 100, 92, 50, 50), 100)
         ])
       );
+      vakingEntity.scripts.setScripts([ValkingMove])
       gamengine.entitys.addNewEntity(vakingEntity);
     };
 
     gamengine.assets.addNewAssets(
       [
-        new Asset("fondo1", "image", fondo1),
-        new Asset("vaking", "image", vaking)
+        new GAMEENGINE.Asset("fondo1", "image", fondo1),
+        new GAMEENGINE.Asset("vaking", "image", vaking)
       ],
       (err) => {
         if (!err) {

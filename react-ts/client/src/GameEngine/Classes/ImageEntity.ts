@@ -21,7 +21,7 @@ export default class ImageEntity extends Entity {
         this.side = side;
     }
 
-    draw(): void {
+    draw = () => {
         const { image, cutting, frame } = this.render.getCurrentFrame();
         const position = this.getPosition();
         const size = this.getSize();
@@ -49,7 +49,7 @@ export default class ImageEntity extends Entity {
         }
     }
 
-    update(): void {
-
+    update = () => {
+        this.scripts.update();
     }
 }

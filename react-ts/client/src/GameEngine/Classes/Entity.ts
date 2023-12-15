@@ -1,4 +1,5 @@
 import Properties from "./Properties";
+import ScriptsManager from "./ScriptsManager";
 import Vector2 from "./Vector2";
 
 
@@ -7,7 +8,9 @@ export default class Entity {
     position: Vector2;
     rotation: number;
     size: Vector2;
-
+    scripts: ScriptsManager = new ScriptsManager(this);
+    draw!: () => void;
+    update!: () => void;
     constructor(name = "New entity", position = new Vector2(0, 0), rotation = 0, size = new Vector2(100, 100)) {
         this.name = name;
         this.position = position;

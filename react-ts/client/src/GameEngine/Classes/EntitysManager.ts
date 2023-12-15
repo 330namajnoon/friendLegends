@@ -1,6 +1,7 @@
+import Entity from "./Entity";
 import ImageEntity from "./ImageEntity";
 
-export type EntityType = ImageEntity;
+export type EntityType = Entity | ImageEntity;
 
 export default class EntityManager {
     entitys: EntityType[] = [];

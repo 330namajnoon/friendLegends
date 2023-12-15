@@ -28,6 +28,7 @@ export default class GameEngine {
 
     update(): void {
         this.entitys.update();
+        this.world.step(1 / 60);
     }
 
     start(): void {
