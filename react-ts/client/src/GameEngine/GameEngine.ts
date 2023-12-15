@@ -28,7 +28,10 @@ export default class GameEngine {
 
     update(): void {
         this.entitys.update();
-        this.world.step(1 / 60);
+        let timeStep = 1;
+        let velocityIterations = 10;
+        let positionIterations = 8;
+        this.world.step(timeStep);
     }
 
     start(): void {

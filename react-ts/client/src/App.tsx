@@ -3,6 +3,7 @@ import React, { Component, ReactNode, createRef, RefObject } from "react";
 import IAppState from "./Interfaces/IAppState";
 import GAMEENGINE from "./GameEngine";
 import ValkingMove from "./Scripts/ValkingMove";
+import Suelo from "./Scripts/Suelo";
 
 // function App() {
 //   const [appState, setAppState] = useState<IAppState>({gameEngine: null, isLoading: true});
@@ -55,6 +56,7 @@ class App extends Component<{}, IAppState> {
           new GAMEENGINE.Sprite(fondo1, new GAMEENGINE.Vector6(0, 0, 400, 200, window.innerWidth / 2, window.innerHeight / 2), 100),
         ])
       );
+      backEntity.scripts.setScripts([Suelo]);
       gamengine.entitys.addNewEntity(backEntity);
 
       const vakingEntity = new GAMEENGINE.ImageEntity(
