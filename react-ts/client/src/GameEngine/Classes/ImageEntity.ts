@@ -2,7 +2,6 @@ import engineContext from "../Contexts/EngineContext";
 import Animation from "./Animation";
 import Entity from "./Entity";
 import Sprite from "./Sprite";
-import Properties, { IProperties } from "./Properties";
 import Vector2 from "./Vector2";
 
 export default class ImageEntity extends Entity {

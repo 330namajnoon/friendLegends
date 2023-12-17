@@ -1,12 +1,12 @@
 import engineContext from "../Contexts/EngineContext";
-import { World } from "../planck-js";
 import { EntityType } from "./EntitysManager";
+import PhysicsEnginManager from "./PhysicsEnginManager.ts";
 
 
 export default class Script {
     entity: EntityType;
     ctx: CanvasRenderingContext2D | null = engineContext.ctx;
-    world: World = engineContext.world;
+    engine: PhysicsEnginManager = engineContext.engine;
     initial!: () => void;
     update!: () => void;
     constructor (entity: EntityType) {

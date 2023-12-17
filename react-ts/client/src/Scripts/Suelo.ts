@@ -1,18 +1,66 @@
+import PhisicBody from "../GameEngine/Classes/PhysicBody";
 import Script from "../GameEngine/Classes/Script";
-import { Body } from "../GameEngine/planck-js";
-import { Edge, Vec2 } from "../GameEngine/planck-js/lib";
-
+import { Bodies, Body } from "matter-js";
+import stringToVector2 from "../GameEngine/Functions/stringToVector2";
 export default class Suelo extends Script {
-    suelo!: Body;
+    suelo!: PhisicBody;
+    body!: PhisicBody;
+    home!: PhisicBody;
     initial = () => {
-        this.suelo = this.world.createBody();
-        this.suelo.createFixture(new Edge(new Vec2(0 ,window.innerHeight - 50), new Vec2(window.innerWidth, window.innerHeight - 50)));
+        console.log(stringToVector2("11 15 18 52 86"))
+        this.suelo = new PhisicBody(
+            window.innerWidth / 2, 810,
+            [
+                [
+                    {x: 0, y: window.innerHeight - 200},
+                    {x: window.innerWidth, y: window.innerHeight - 200},
+                    {x: window.innerWidth, y: window.innerHeight},
+                    {x: 0, y: window.innerHeight},
+                ]
+            ],
+            {
+                isStatic: true
+            }
+        );
+        this.engine.worldAdd(this.suelo.body);
+        
+        this.home = new PhisicBody(
+            window.innerWidth / 1.28, 550,
+            [
+                [
+                    {x: 0, y: 0},
+                    {x: 40, y: -20},
+                    {x: 250, y: -200},
+                    {x: 450, y: 0},
+                    {x: 450, y: 150},
+                    {x: 0, y: 150},
+                    {x: 0, y: 0},
+                    
+                ],
+            ],
+            {
+                isStatic: true
+            }
+        );
+        this.engine.worldAdd(this.home.body);
+        // this.body = new PhisicBody(120, 0,
+        //     [
+        //         [
+        //             { x: 0, y: 0 },
+        //             { x: 100, y: 50 },
+        //             { x: 0, y: 100 },
+        //             { x: 0, y: 0 },
+        //         ]
+        //     ],
+        //     {
+        //         restitution: 0.5
+        //     }
+        // );
+        // this.engine.worldAdd(this.body.body);
     }
 
     update = () => {
-        this.ctx?.beginPath();
-        this.ctx?.moveTo(0 ,window.innerHeight - 50);
-        this.ctx?.lineTo(window.innerWidth, window.innerHeight - 50);
-        this.ctx?.stroke();
+        //this.suelo.draw()
+        this.home.draw();
     }
 }

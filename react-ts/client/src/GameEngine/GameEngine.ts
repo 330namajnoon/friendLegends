@@ -1,25 +1,28 @@
 import AssetsManager from "./Classes/AssetsManager";
 import Entity from "./Classes/Entity";
 import EntityManager from "./Classes/EntitysManager";
+import Functions from "./Classes/Functions";
 import ImageEntity from "./Classes/ImageEntity";
+import PhysicsEnginManager from "./Classes/PhysicsEnginManager.ts";
+import ScriptsManager from "./Classes/ScriptsManager";
 import engineContext from "./Contexts/EngineContext";
-import PLANCK from "./planck-js"
-
 
 export default class GameEngine {
-    world: PLANCK.World = PLANCK.World(PLANCK.Vec2(0, 10));
+    engine: PhysicsEnginManager =  new PhysicsEnginManager();
     private frame: number = 0;
     private canvas: HTMLCanvasElement;
     private ctx: CanvasRenderingContext2D | null;
     assets: AssetsManager = new AssetsManager();
     entitys: EntityManager = new EntityManager();
+    functions: Functions = new Functions();
     constructor(args = { canvas: window.document.createElement("canvas"), width: window.innerWidth, heigth: window.innerHeight, root: window.document.body }) {
         this.canvas = args.canvas ? args.canvas : window.document.createElement("canvas");
         this.ctx = this.canvas.getContext("2d");
         args.root.appendChild(this.canvas);
         this.setCanvasSize(args.width ? args.width : window.innerWidth, args.heigth ? args.heigth : window.innerHeight);
         engineContext.setCtx(this.ctx);
-        engineContext.setWorld(this.world);
+        engineContext.setEngine(this.engine);
+        engineContext.setFunctions(this.functions);
     }
 
     draw(): void {
@@ -27,11 +30,9 @@ export default class GameEngine {
     }
 
     update(): void {
+        this.engine.update();
         this.entitys.update();
-        let timeStep = 1;
-        let velocityIterations = 10;
-        let positionIterations = 8;
-        this.world.step(timeStep);
+        this.functions.update();
     }
 
     start(): void {

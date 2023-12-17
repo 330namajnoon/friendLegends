@@ -30,13 +30,6 @@ import Suelo from "./Scripts/Suelo";
 
 class App extends Component<{}, IAppState> {
   canvas: RefObject<HTMLCanvasElement> = createRef<HTMLCanvasElement>();
-  constructor(props: {}) {
-    super(props);
-    this.state = {
-      gameEngine: null,
-      isLoading: true,
-    };
-  }
 
   componentDidMount(): void {
     const gamengine = new GAMEENGINE.Engine();
@@ -44,7 +37,7 @@ class App extends Component<{}, IAppState> {
     fondo1.src = "./assets/images/fondo1.jpg";
     const vaking = window.document.createElement("img");
     vaking.src = "./assets/images/vaking.png";
-    document.body.appendChild(vaking)
+    //document.body.appendChild(vaking)
     const renderer = () => {
       const backEntity = new GAMEENGINE.ImageEntity(
         "back",
