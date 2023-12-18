@@ -14,6 +14,9 @@ import PhysicsEnginManager from "./Classes/PhysicsEnginManager.ts";
 import PhysicBody from "./Classes/PhysicBody";
 import ChildrensManager from "./Classes/ChildrensManager";
 import Functions from "./Classes/Functions";
+import AnimationManager from "./Classes/AnimationsManager";
+import Events from "./Classes/Events";
+import Event from "./Classes/Event";
 import { EntityType } from "./Classes/EntitysManager";
 const INDEX = {
     Engine,
@@ -32,6 +35,9 @@ const INDEX = {
     PhysicBody,
     ChildrensManager,
     Functions,
+    AnimationManager,
+    Events,
+    Event,
 };
 
 export default INDEX;

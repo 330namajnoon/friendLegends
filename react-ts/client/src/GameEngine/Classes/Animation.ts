@@ -4,10 +4,12 @@ export default class Animation {
     private totalFrame: number;
     private render: ImageRender[];
     private currentFrame: ImageRender;
-    constructor (totalFrame: number, render: ImageRender[]) {
+    name: string;
+    constructor (name: string,totalFrame: number, render: ImageRender[]) {
         this.totalFrame = totalFrame;
         this.render = render;
         this.currentFrame = render[0];
+        this.name = name;
     }
 
     getCurrentFrame(): ImageRender {

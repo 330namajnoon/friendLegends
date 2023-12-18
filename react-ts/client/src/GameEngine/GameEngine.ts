@@ -1,6 +1,7 @@
 import AssetsManager from "./Classes/AssetsManager";
 import Entity from "./Classes/Entity";
 import EntityManager from "./Classes/EntitysManager";
+import Events from "./Classes/Events";
 import Functions from "./Classes/Functions";
 import ImageEntity from "./Classes/ImageEntity";
 import PhysicsEnginManager from "./Classes/PhysicsEnginManager.ts";
@@ -15,6 +16,7 @@ export default class GameEngine {
     assets: AssetsManager = new AssetsManager();
     entitys: EntityManager = new EntityManager();
     functions: Functions = new Functions();
+    events: Events = new Events();
     constructor(args = { canvas: window.document.createElement("canvas"), width: window.innerWidth, heigth: window.innerHeight, root: window.document.body }) {
         this.canvas = args.canvas ? args.canvas : window.document.createElement("canvas");
         this.ctx = this.canvas.getContext("2d");
@@ -23,6 +25,8 @@ export default class GameEngine {
         engineContext.setCtx(this.ctx);
         engineContext.setEngine(this.engine);
         engineContext.setFunctions(this.functions);
+        engineContext.setEvents(this.events);
+        engineContext.setApp(this);
     }
 
     draw(): void {

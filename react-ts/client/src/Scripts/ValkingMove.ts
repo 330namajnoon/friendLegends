@@ -43,6 +43,10 @@ export default class ValkingMove extends Script {
             }
         })
 
+        this.app.events.mousedown([this.body.body], (e, bodies) => {
+            console.log((e as MouseEvent).clientX, bodies);
+        })
+
     };
     draw() {
 

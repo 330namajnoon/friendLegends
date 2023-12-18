@@ -44,10 +44,12 @@ class App extends Component<{}, IAppState> {
         new GAMEENGINE.Vector2(window.innerWidth / 2, window.innerHeight / 2),
         0,
         new GAMEENGINE.Vector2(window.innerWidth, window.innerHeight),
-        "RIGHT",
-        new GAMEENGINE.Animation(100, [
-          new GAMEENGINE.Sprite(fondo1, new GAMEENGINE.Vector6(0, 0, 400, 200, window.innerWidth / 2, window.innerHeight / 2), 100),
-        ])
+        "LEFT",
+        [
+          new GAMEENGINE.Animation("parada", 100, [
+            new GAMEENGINE.Sprite(fondo1, new GAMEENGINE.Vector6(0, 0, 400, 200, window.innerWidth / 2, window.innerHeight / 2), 100),
+          ])
+        ]
       );
       backEntity.scripts.setScripts([Suelo]);
       gamengine.entitys.addNewEntity(backEntity);
@@ -57,10 +59,12 @@ class App extends Component<{}, IAppState> {
         new GAMEENGINE.Vector2(100, 100),
         0,
         new GAMEENGINE.Vector2(100, 100),
-        "LEFT",
-        new GAMEENGINE.Animation(100, [
-          new GAMEENGINE.Sprite(vaking, new GAMEENGINE.Vector6(64, 67, 100, 92, 50, 50), 100)
-        ])
+        "RIGHT_BOTTOM",
+        [
+          new GAMEENGINE.Animation("caminar", 100, [
+            new GAMEENGINE.Sprite(vaking, new GAMEENGINE.Vector6(64, 67, 100, 92, 50, 50), 100)
+          ])
+        ]
       );
       vakingEntity.scripts.setScripts([ValkingMove])
       gamengine.entitys.addNewEntity(vakingEntity);
