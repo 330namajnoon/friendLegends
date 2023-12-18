@@ -1,4 +1,4 @@
-import { Bodies, Body, Engine } from "matter-js";
+import { Bodies, Body, Engine, Events } from "matter-js";
 import Script from "../GameEngine/Classes/Script";
 import PhisicBody from "../GameEngine/Classes/PhysicBody";
 
@@ -25,26 +25,30 @@ export default class ValkingMove extends Script {
         this.engine.worldAdd(this.body.body);
         Body.setInertia(this.body.body, Infinity);
         Body.setAngularVelocity(this.body.body, 0);
-        window.addEventListener("keydown", (e) => {
-            switch (e.key) {
-                case "ArrowRight":
-                    this.moveRight();
-                    break;
-                case "ArrowLeft":
-                    this.moveLeft();
-                    break;
-                case " ":
-                    this.jump();
-                    break;
+      
 
-                default:
-                    console.log(e.key)
-                    break;
-            }
+        this.app.events.mouseOn("mousedown",(e, bodies) => {
+            console.log(e.clientX, bodies);
+        }, [this.body.body]);
+
+        this.app.events.keyboardOn("keydown", "ArrowRight", (e) => {
+            this.moveRight()
+        })
+        
+        this.app.events.keyboardOn("keydown", "ArrowLeft", (e) => {
+            this.moveLeft()
         })
 
-        this.app.events.mousedown([this.body.body], (e, bodies) => {
-            console.log((e as MouseEvent).clientX, bodies);
+
+        this.app.events.keyboardOn("keyup","a", (e) => {
+            console.log("keyUp")
+        })
+
+        this.app.events.keyboardOn("keypress", " ", (e) => {
+            this.jump();
+        })
+        Events.on(this.body.body, "collisionStart", (event) => {
+            console.log(event);
         })
 
     };
@@ -55,19 +59,19 @@ export default class ValkingMove extends Script {
     jump() {
         const body = this.body.body;
         const { x, y } = body.position;
-        Body.applyForce(body, { x, y }, { x: 0, y: -0.5 });
+        Body.applyForce(body, { x, y }, { x: 0, y: -0.3 });
     }
 
     moveLeft() {
         const body = this.body.body;
         const { x, y } = body.position;
-        Body.applyForce(body, { x, y }, { x: -0.05, y: 0 });
+        Body.applyForce(body, { x, y }, { x: -0.01, y: 0 });
     }
 
     moveRight() {
         const body = this.body.body;
         const { x, y } = body.position;
-        Body.applyForce(body, { x, y }, { x: 0.05, y: 0 });
+        Body.applyForce(body, { x, y }, { x: 0.01, y: 0 });
     }
 
     update = () => {

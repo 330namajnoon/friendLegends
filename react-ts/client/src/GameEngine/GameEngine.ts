@@ -37,6 +37,7 @@ export default class GameEngine {
         this.engine.update();
         this.entitys.update();
         this.functions.update();
+        this.events.calling();
     }
 
     start(): void {
