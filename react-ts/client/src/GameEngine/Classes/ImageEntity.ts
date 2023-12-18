@@ -9,7 +9,7 @@ import Events from "./Events";
 export type SideType = "LEFT" | "RIGHT" | "TOP" | "BOTTOM" | "LEFT_TOP" | "LEFT_BOTTOM" | "RIGHT_TOP" | "RIGHT_BOTTOM";
 export default class ImageEntity extends Entity {
     side: SideType;
-    render: AnimationManager;
+    animations: AnimationManager;
     events: Events = new Events();
     constructor(
         name = "New entity",
@@ -17,15 +17,15 @@ export default class ImageEntity extends Entity {
         rotation = 0,
         size = new Vector2(100, 100),
         side: SideType,
-        render: Animation[]
+        sprites: Animation[]
     ) {
         super(name, position, rotation, size);
-        this.render = new AnimationManager(render);
+        this.animations = new AnimationManager(sprites);
         this.side = side;
     }
 
     draw = () => {
-        const { image, cutting, frame } = this.render.getCurrentAnimation().getCurrentFrame();
+        const { image, cutting, frame } = this.animations.getCurrentAnimation().getCurrentSprite();
         const position = this.getPosition();
         const size = this.getSize();
         if (engineContext.ctx) {
@@ -79,5 +79,6 @@ export default class ImageEntity extends Entity {
 
     update = () => {
         this.scripts.update();
+        this.animations.getCurrentAnimation().renderer();
     }
 }
