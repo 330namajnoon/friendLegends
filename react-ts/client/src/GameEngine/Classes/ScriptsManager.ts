@@ -1,8 +1,5 @@
-import GameEngine from "../GameEngine";
-import { EntityType } from "./EntitysManager";
 
-
-export default class ScriptsManager {
+export default class ScriptsManager<EntityType> {
     entity: EntityType;
     scripts: any[] = [];
     constructor (entity: EntityType) {

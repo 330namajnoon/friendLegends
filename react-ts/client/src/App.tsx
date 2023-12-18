@@ -52,7 +52,7 @@ class App extends Component<{}, IAppState> {
         ]
       );
       backEntity.scripts.setScripts([Suelo]);
-      gamengine.entitys.addNewEntity(backEntity);
+      gamengine.entitys.append("imageEntity",backEntity);
 
       const vakingEntity = new GAMEENGINE.ImageEntity(
         "vaking",
@@ -61,13 +61,22 @@ class App extends Component<{}, IAppState> {
         new GAMEENGINE.Vector2(100, 100),
         "RIGHT_BOTTOM",
         [
-          new GAMEENGINE.Animation("caminar", 100, [
-            new GAMEENGINE.Sprite(vaking, new GAMEENGINE.Vector6(64, 67, 100, 92, 50, 50), 100)
+          new GAMEENGINE.Animation("caminar", 40, [
+            new GAMEENGINE.Sprite(vaking, new GAMEENGINE.Vector6(64, 67, 100, 92, 50, 50), 10),
+            new GAMEENGINE.Sprite(vaking, new GAMEENGINE.Vector6(187, 67, 100, 92, 50, 50), 20),
+            new GAMEENGINE.Sprite(vaking, new GAMEENGINE.Vector6(299, 67, 100, 92, 50, 50), 30),
+            new GAMEENGINE.Sprite(vaking, new GAMEENGINE.Vector6(422, 67, 100, 92, 50, 50), 40),
+            new GAMEENGINE.Sprite(vaking, new GAMEENGINE.Vector6(548, 67, 100, 92, 50, 50), 50),
+            new GAMEENGINE.Sprite(vaking, new GAMEENGINE.Vector6(66, 203, 100, 92, 50, 50), 60),
+            new GAMEENGINE.Sprite(vaking, new GAMEENGINE.Vector6(189, 203, 100, 92, 50, 50), 70),
+            new GAMEENGINE.Sprite(vaking, new GAMEENGINE.Vector6(315, 203, 100, 92, 50, 50), 80),
+            new GAMEENGINE.Sprite(vaking, new GAMEENGINE.Vector6(434, 203, 100, 92, 50, 50), 90),
+            new GAMEENGINE.Sprite(vaking, new GAMEENGINE.Vector6(555, 203, 100, 92, 50, 50), 100),
           ])
         ]
       );
       vakingEntity.scripts.setScripts([ValkingMove])
-      gamengine.entitys.addNewEntity(vakingEntity);
+      gamengine.entitys.append("imageEntity",vakingEntity);
     };
 
     gamengine.assets.addNewAssets(

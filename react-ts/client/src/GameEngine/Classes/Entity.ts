@@ -9,7 +9,6 @@ export default class Entity {
     position: Vector2;
     rotation: number;
     size: Vector2;
-    scripts: ScriptsManager = new ScriptsManager(this);
     childrens: ChildrensManager = new ChildrensManager(this);
     draw!: () => void;
     update!: () => void;

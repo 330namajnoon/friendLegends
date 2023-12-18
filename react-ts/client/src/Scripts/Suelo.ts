@@ -2,7 +2,8 @@ import PhisicBody from "../GameEngine/Classes/PhysicBody";
 import Script from "../GameEngine/Classes/Script";
 import { Bodies, Body } from "matter-js";
 import stringToVector2 from "../GameEngine/Functions/stringToVector2";
-export default class Suelo extends Script {
+import ImageEntity from "../GameEngine/Classes/ImageEntity";
+export default class Suelo extends Script<ImageEntity> {
     suelo!: PhisicBody;
     body!: PhisicBody;
     home!: PhisicBody;

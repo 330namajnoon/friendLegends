@@ -5,12 +5,15 @@ import Entity from "./Entity";
 import Sprite from "./Sprite";
 import Vector2 from "./Vector2";
 import Events from "./Events";
+import ScriptsManager from "./ScriptsManager";
+import ChildrensManager from "./ChildrensManager";
 
 export type SideType = "LEFT" | "RIGHT" | "TOP" | "BOTTOM" | "LEFT_TOP" | "LEFT_BOTTOM" | "RIGHT_TOP" | "RIGHT_BOTTOM";
 export default class ImageEntity extends Entity {
     side: SideType;
     animations: AnimationManager;
     events: Events = new Events();
+    scripts: ScriptsManager<ImageEntity> = new ScriptsManager<ImageEntity>(this);
     constructor(
         name = "New entity",
         position = new Vector2(0, 0),
@@ -80,5 +83,9 @@ export default class ImageEntity extends Entity {
     update = () => {
         this.scripts.update();
         this.animations.getCurrentAnimation().renderer();
+    }
+
+    setSide(side: SideType):void {
+        this.side = side;
     }
 }

@@ -6,20 +6,27 @@ export default class Animation {
     private totalFrame: number;
     private sprites: Sprite[];
     private currentSprite: Sprite;
+    private spriteIndex: number = 0;
     name: string;
-    constructor (name: string,totalFrame: number,sprites: Sprite[]) {
+    constructor(name: string, totalFrame: number, sprites: Sprite[]) {
         this.totalFrame = totalFrame;
         this.sprites = sprites;
-        this.currentSprite = sprites[0];
+        this.currentSprite = sprites[this.spriteIndex];
         this.name = name;
     }
 
     renderer(): void {
         if (this.isPlayed) {
-            if (this.frame > this.currentSprite.frame) {
-                this.setCurrntSprite(this.sprites.find(s => s.frame > this.frame));
+            if (this.frame > (this.totalFrame / 100 * this.currentSprite.frame)) {
+                this.spriteIndex === this.sprites.length - 1 ? this.spriteIndex = 0 : this.spriteIndex++;
+                this.setCurrntSprite(this.sprites[this.spriteIndex])
             }
-            this.frame <= this.totalFrame ? this.frame++ : this.frame = 0;
+            if (this.frame === this.totalFrame) {
+                this.frame = 0;
+                this.setCurrntSprite(this.sprites[0]);
+            }
+            else
+                this.frame++;
         }
     }
 
@@ -30,9 +37,13 @@ export default class Animation {
     pause(): void {
         this.isPlayed = false;
     }
-    
+
+    reset(): void {
+        this.setCurrntSprite(this.sprites[0]);
+    }
+
     setCurrntSprite(sprite: Sprite | undefined): void {
-        if(sprite) this.currentSprite = sprite;
+        if (sprite) this.currentSprite = sprite;
     }
 
     getCurrentSprite(): Sprite {

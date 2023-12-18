@@ -1,8 +1,9 @@
 import { Bodies, Body, Engine, Events } from "matter-js";
 import Script from "../GameEngine/Classes/Script";
 import PhisicBody from "../GameEngine/Classes/PhysicBody";
+import ImageEntity from "../GameEngine/Classes/ImageEntity";
 
-export default class ValkingMove extends Script {
+export default class ValkingMove extends Script<ImageEntity> {
     body!: PhisicBody;
 
     initial = () => {
@@ -32,10 +33,27 @@ export default class ValkingMove extends Script {
         }, [this.body.body]);
 
         this.app.events.keyboardOn("keydown", "ArrowRight", (e) => {
+            this.entity.setSide("RIGHT");
+            this.entity.animations.getCurrentAnimation().play();
             this.moveRight()
         })
         
         this.app.events.keyboardOn("keydown", "ArrowLeft", (e) => {
+            this.entity.setSide("LEFT");
+            this.entity.animations.getCurrentAnimation().play();
+            this.moveLeft()
+        })
+        this.app.events.keyboardOn("keyup", "ArrowRight", (e) => {
+            this.entity.setSide("RIGHT");
+            this.entity.animations.getCurrentAnimation().pause();
+            this.entity.animations.getCurrentAnimation().reset();
+            this.moveRight()
+        })
+        
+        this.app.events.keyboardOn("keyup", "ArrowLeft", (e) => {
+            this.entity.setSide("LEFT");
+            this.entity.animations.getCurrentAnimation().pause();
+            this.entity.animations.getCurrentAnimation().reset();
             this.moveLeft()
         })
 
@@ -50,7 +68,6 @@ export default class ValkingMove extends Script {
         Events.on(this.body.body, "collisionStart", (event) => {
             console.log(event);
         })
-
     };
     draw() {
 
@@ -79,6 +96,6 @@ export default class ValkingMove extends Script {
         this.entity.position.y = this.body.body.position.y;
         //this.ctx?.strokeRect(this.body.body.position.x, this.body.body.position.y, 100,100)
         //this.body.body.angle = 0;
-        this.body.draw()
+        //this.body.draw()
     };
 }
