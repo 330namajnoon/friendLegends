@@ -17,6 +17,7 @@ export default class Animation {
 
     renderer(): void {
         if (this.isPlayed) {
+            this.currentSprite.getCallBacks().length > 0 && this.currentSprite.getCallBacks().forEach(c => c(this.frame));
             if (this.frame > (this.totalFrame / 100 * this.currentSprite.frame)) {
                 this.spriteIndex === this.sprites.length - 1 ? this.spriteIndex = 0 : this.spriteIndex++;
                 this.setCurrntSprite(this.sprites[this.spriteIndex])
@@ -48,5 +49,9 @@ export default class Animation {
 
     getCurrentSprite(): Sprite {
         return this.currentSprite;
+    }
+
+    getSprite(index: number): Sprite {
+        return this.sprites[index];
     }
 }

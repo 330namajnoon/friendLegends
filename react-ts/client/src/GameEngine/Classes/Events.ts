@@ -15,6 +15,7 @@ export type KeyboardEventMap = {
 }
 
 export default class Events {
+    private isKeyDown: boolean = false;
     private events: Event<any>[] = [];
     private callingEvents: { e: KeyboardEvent, event: Event<any> }[] = [];
     constructor() {
@@ -39,14 +40,18 @@ export default class Events {
             })
         })
         window.addEventListener("keydown", (e) => {
-            this.events.forEach(e_ => {
-                if (e_.type === "keydown" && e_.key === e.key) {
-                    const event = this.callingEvents.find(_e_ => _e_.event.key === e.key);
-                    !event && this.callingEvents.push({e,event:e_});
-                }
-            })
+            if (!this.isKeyDown) {
+                this.events.forEach(e_ => {
+                    if (e_.type === "keydown" && e_.key === e.key) {
+                        const event = this.callingEvents.find(_e_ => _e_.event.key === e.key);
+                        this.callingEvents.push({e,event:e_});
+                    }
+                })
+                this.isKeyDown = true;
+            }
         })
         window.addEventListener("keyup", (e) => {
+            this.isKeyDown = false;
             this.callingEvents = this.callingEvents.filter(e_ => e_.event.key !== e.key);
             this.events.forEach(e_ => {
                 if (e_.key === e.key && e_.type === "keyup") {

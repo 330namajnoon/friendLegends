@@ -1,11 +1,11 @@
-import { Bodies, Body, Engine, Events } from "matter-js";
+import { Body, Events } from "matter-js";
+import ImageEntity from "../GameEngine/Classes/ImageEntity";
 import Script from "../GameEngine/Classes/Script";
 import PhisicBody from "../GameEngine/Classes/PhysicBody";
-import ImageEntity from "../GameEngine/Classes/ImageEntity";
-import Animation from "../GameEngine/Classes/Animation";
-import GAMEENGINE from "../GameEngine"
-import Children from "./Children";
-export default class ValkingMove extends Script<ImageEntity> {
+
+
+export default class Children extends Script<ImageEntity> {
+
     body!: PhisicBody;
 
     initial = () => {
@@ -49,14 +49,12 @@ export default class ValkingMove extends Script<ImageEntity> {
             this.entity.setSide("RIGHT");
             this.entity.animations.getCurrentAnimation().pause();
             this.entity.animations.getCurrentAnimation().reset();
-            this.moveRight()
         })
 
         this.app.events.keyboardOn("keyup", "ArrowLeft", (e) => {
             this.entity.setSide("LEFT");
             this.entity.animations.getCurrentAnimation().pause();
             this.entity.animations.getCurrentAnimation().reset();
-            this.moveLeft()
         })
 
 
@@ -74,31 +72,6 @@ export default class ValkingMove extends Script<ImageEntity> {
         this.entity.animations.getCurrentAnimation().getSprite(3).setCallBack((frame: number) => {
             console.log(frame);
         })
-        const vaking = this.app.assets.getByName("vaking")?.element as HTMLImageElement;
-        console.log(vaking)
-        const children = new GAMEENGINE.ImageEntity(
-            "vaking",
-            new GAMEENGINE.Vector2(100, 100),
-            0,
-            new GAMEENGINE.Vector2(100, 100),
-            "RIGHT_BOTTOM",
-            [
-                new GAMEENGINE.Animation("caminar", 35, [
-                    new GAMEENGINE.Sprite(vaking, new GAMEENGINE.Vector6(64, 67, 100, 92, 35, 50), 10),
-                    new GAMEENGINE.Sprite(vaking, new GAMEENGINE.Vector6(187, 67, 100, 92, 35, 50), 20),
-                    new GAMEENGINE.Sprite(vaking, new GAMEENGINE.Vector6(299, 67, 100, 92, 35, 50), 30),
-                    new GAMEENGINE.Sprite(vaking, new GAMEENGINE.Vector6(422, 67, 100, 92, 35, 50), 40),
-                    new GAMEENGINE.Sprite(vaking, new GAMEENGINE.Vector6(548, 67, 100, 92, 35, 50), 50),
-                    new GAMEENGINE.Sprite(vaking, new GAMEENGINE.Vector6(66, 203, 100, 92, 35, 50), 60),
-                    new GAMEENGINE.Sprite(vaking, new GAMEENGINE.Vector6(189, 203, 100, 92, 35, 50), 70),
-                    new GAMEENGINE.Sprite(vaking, new GAMEENGINE.Vector6(315, 203, 100, 92, 35, 50), 80),
-                    new GAMEENGINE.Sprite(vaking, new GAMEENGINE.Vector6(434, 203, 100, 92, 35, 50), 90),
-                    new GAMEENGINE.Sprite(vaking, new GAMEENGINE.Vector6(555, 203, 100, 92, 35, 50), 100),
-                ])
-            ]
-        )
-        children.scripts.setScripts([Children])
-        this.entity.childrens.append(children);
 
         
     };

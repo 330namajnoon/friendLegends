@@ -27,8 +27,6 @@ export default class ChildrensManager {
     update(): void {
         this.childrens.forEach(e => {
             e.update();
-            e.position.x = this.entity.position.x + e.position.x;
-            e.position.y = this.entity.position.y + e.position.y;
         })
     }
 }

@@ -11,4 +11,5 @@ export default class Asset {
         this.type = type;
         this.element = element;
     }
+    
 }

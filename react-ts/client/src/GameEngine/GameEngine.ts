@@ -1,3 +1,4 @@
+import Asset from "./Classes/Asset";
 import AssetsManager from "./Classes/AssetsManager";
 import Entity from "./Classes/Entity";
 import EntityManager from "./Classes/EntitysManager";
@@ -51,4 +52,6 @@ export default class GameEngine {
         this.canvas.width = width;
         this.canvas.height = height;
     }
+
+
 }

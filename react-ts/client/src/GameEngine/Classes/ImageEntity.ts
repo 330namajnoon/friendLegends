@@ -78,11 +78,14 @@ export default class ImageEntity extends Entity {
 
             engineContext.ctx?.restore();
         }
+
+        this.childrens.draw();
     }
 
     update = () => {
         this.scripts.update();
         this.animations.getCurrentAnimation().renderer();
+        this.childrens.update();
     }
 
     setSide(side: SideType):void {
