@@ -32,12 +32,7 @@ class App extends Component<{}, IAppState> {
   canvas: RefObject<HTMLCanvasElement> = createRef<HTMLCanvasElement>();
 
   componentDidMount(): void {
-    const gamengine = new GAMEENGINE.Engine();
-    const fondo1 = window.document.createElement("img");
-    fondo1.src = "./assets/images/fondo1.jpg";
-    const vaking = window.document.createElement("img");
-    vaking.src = "./assets/images/vaking.png";
-    //document.body.appendChild(vaking)
+    
     const renderer = () => {
       const backEntity = new GAMEENGINE.ImageEntity(
         "back",
@@ -78,7 +73,11 @@ class App extends Component<{}, IAppState> {
       vakingEntity.scripts.setScripts([ValkingMove])
       gamengine.entitys.append("imageEntity",vakingEntity);
     };
-
+    const gamengine = new GAMEENGINE.Engine();
+    const fondo1 = window.document.createElement("img");
+    fondo1.src = "./assets/images/fondo1.jpg";
+    const vaking = window.document.createElement("img");
+    vaking.src = "./assets/images/vaking.png";
     gamengine.assets.addNewAssets(
       [
         new GAMEENGINE.Asset("fondo1", "image", fondo1),
