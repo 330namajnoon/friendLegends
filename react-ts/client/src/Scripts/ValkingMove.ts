@@ -1,10 +1,7 @@
-import { Bodies, Body, Engine, Events } from "matter-js";
+import { Body, Events } from "matter-js";
 import Script from "../GameEngine/Classes/Script";
 import PhisicBody from "../GameEngine/Classes/PhysicBody";
 import ImageEntity from "../GameEngine/Classes/ImageEntity";
-import Animation from "../GameEngine/Classes/Animation";
-import GAMEENGINE from "../GameEngine"
-import Children from "./Children";
 export default class ValkingMove extends Script<ImageEntity> {
     body!: PhisicBody;
 

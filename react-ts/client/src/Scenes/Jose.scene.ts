@@ -1,5 +1,4 @@
 import Animation from "../GameEngine/Classes/Animation";
-import Entity from "../GameEngine/Classes/Entity";
 import ImageEntity from "../GameEngine/Classes/ImageEntity";
 import Scene from "../GameEngine/Classes/Scene";
 import Sprite from "../GameEngine/Classes/Sprite";
@@ -8,7 +7,6 @@ import Vector6 from "../GameEngine/Classes/Vector6";
 import GameEngine from "../GameEngine/GameEngine";
 import JoseMouve from "../Scripts/JoseMouve";
 import Suelo from "../Scripts/Suelo";
-import ValkingMove from "../Scripts/ValkingMove";
 
 export default class JoseScene extends Scene {
     initial = (app: GameEngine) => {

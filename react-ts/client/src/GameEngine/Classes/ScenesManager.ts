@@ -1,6 +1,4 @@
 import App from "./App";
-import GameEngine from "../GameEngine";
-import Scene from "./Scene";
 
 
 export default class ScenesManager extends App {
