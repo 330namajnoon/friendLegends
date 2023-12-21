@@ -1,11 +1,10 @@
-import { Body, Events } from "matter-js";
+import { Body } from "matter-js";
 import ImageEntity from "../GameEngine/Classes/ImageEntity";
-import Script from "../GameEngine/Classes/Script";
 import PhisicBody from "../GameEngine/Classes/PhysicBody";
+import Script from "../GameEngine/Classes/Script";
 
 
-export default class Children extends Script<ImageEntity> {
-
+export default class JoseMouve extends Script<ImageEntity> {
     body!: PhisicBody;
 
     initial = () => {
@@ -29,32 +28,31 @@ export default class Children extends Script<ImageEntity> {
         Body.setInertia(this.body.body, Infinity);
         Body.setAngularVelocity(this.body.body, 0);
 
-
         this.app.events.mouseOn("mousedown", (e, bodies) => {
             console.log(e.clientX, bodies);
         }, [this.body.body]);
 
         this.app.events.keyboardOn("keydown", "ArrowRight", (e) => {
             this.entity.setSide("RIGHT");
-            this.entity.animations.getCurrentAnimation().play();
+            this.entity.animations.setCurrentAnimation("WALK")?.play();
             this.moveRight()
         })
 
         this.app.events.keyboardOn("keydown", "ArrowLeft", (e) => {
             this.entity.setSide("LEFT");
-            this.entity.animations.getCurrentAnimation().play();
+            this.entity.animations.setCurrentAnimation("WALK")?.play();
             this.moveLeft()
         })
         this.app.events.keyboardOn("keyup", "ArrowRight", (e) => {
             this.entity.setSide("RIGHT");
-            this.entity.animations.getCurrentAnimation().pause();
-            this.entity.animations.getCurrentAnimation().reset();
+            this.entity.animations.setCurrentAnimation("IDLE")?.play();
+            this.moveRight()
         })
-
+        
         this.app.events.keyboardOn("keyup", "ArrowLeft", (e) => {
             this.entity.setSide("LEFT");
-            this.entity.animations.getCurrentAnimation().pause();
-            this.entity.animations.getCurrentAnimation().reset();
+            this.entity.animations.setCurrentAnimation("IDLE")?.play();
+            this.moveLeft()
         })
 
 
@@ -63,20 +61,23 @@ export default class Children extends Script<ImageEntity> {
         })
 
         this.app.events.keyboardOn("keypress", " ", (e) => {
+            const animation = this.entity.animations.setCurrentAnimation("JUMP");
+            animation?.getSprite(4).setCallBack((frame) => {
+                console.log(frame);
+                if (frame === false) {
+                    animation.pause();
+                    this.entity.animations.setCurrentAnimation("IDLE")?.play();
+                }
+            })
+            animation?.play(false);
             this.jump();
         })
-        Events.on(this.body.body, "collisionStart", (event) => {
-            console.log(event);
+
+        this.app.events.keyboardOn("keydown", "q", (e) => {
+            this.entity.animations.setCurrentAnimation("ATTACK1")?.play(false);
         })
 
-        this.entity.animations.getCurrentAnimation().getSprite(3).setCallBack((frame: number | boolean) => {
-            console.log(frame);
-        })
-
-        
-    };
-    draw() {
-
+        this.entity.animations.setCurrentAnimation("IDLE")?.play();
     }
 
     jump() {
@@ -100,8 +101,5 @@ export default class Children extends Script<ImageEntity> {
     update = () => {
         this.entity.position.x = this.body.body.position.x;
         this.entity.position.y = this.body.body.position.y;
-        //this.ctx?.strokeRect(this.body.body.position.x, this.body.body.position.y, 100,100)
-        //this.body.body.angle = 0;
-        //this.body.draw()
-    };
+    }
 }

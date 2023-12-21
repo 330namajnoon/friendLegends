@@ -6,6 +6,7 @@ import Events from "./Classes/Events";
 import Functions from "./Classes/Functions";
 import ImageEntity from "./Classes/ImageEntity";
 import PhysicsEnginManager from "./Classes/PhysicsEnginManager.ts";
+import ScenesManager from "./Classes/ScenesManager";
 import ScriptsManager from "./Classes/ScriptsManager";
 import engineContext from "./Contexts/EngineContext";
 
@@ -18,6 +19,7 @@ export default class GameEngine {
     entitys: EntityManager = new EntityManager();
     functions: Functions = new Functions();
     events: Events = new Events();
+    scenes: ScenesManager = new ScenesManager(this);
     constructor(args = { canvas: window.document.createElement("canvas"), width: window.innerWidth, heigth: window.innerHeight, root: window.document.body }) {
         this.canvas = args.canvas ? args.canvas : window.document.createElement("canvas");
         this.ctx = this.canvas.getContext("2d");

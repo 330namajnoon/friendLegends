@@ -1,6 +1,7 @@
 import Sprite from "./Sprite";
 
 export default class Animation {
+    private loop: boolean = true;
     private frame: number = 0;
     private isPlayed: boolean = false;
     private totalFrame: number;
@@ -17,7 +18,7 @@ export default class Animation {
 
     renderer(): void {
         if (this.isPlayed) {
-            this.currentSprite.getCallBacks().length > 0 && this.currentSprite.getCallBacks().forEach(c => c(this.frame));
+            this.currentSprite.getCallBacks().length > 0 && this.currentSprite.getCallBacks().forEach(c => c(this.frame === (this.totalFrame / 100 * this.currentSprite.frame) ? false : this.frame));
             if (this.frame > (this.totalFrame / 100 * this.currentSprite.frame)) {
                 this.spriteIndex === this.sprites.length - 1 ? this.spriteIndex = 0 : this.spriteIndex++;
                 this.setCurrntSprite(this.sprites[this.spriteIndex])
@@ -25,13 +26,16 @@ export default class Animation {
             if (this.frame === this.totalFrame) {
                 this.frame = 0;
                 this.setCurrntSprite(this.sprites[0]);
+                if (!this.loop)
+                    this.isPlayed = false;
             }
             else
                 this.frame++;
         }
     }
 
-    play(): void {
+    play(loop: boolean = true): void {
+        this.loop = loop;
         this.isPlayed = true;
     }
 

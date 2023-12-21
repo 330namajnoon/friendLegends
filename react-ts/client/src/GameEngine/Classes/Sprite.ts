@@ -1,6 +1,6 @@
 import Vector6 from "./Vector6";
 
-export type CallBackType  = (frame: number) => void;
+export type CallBackType  = (frame: number | boolean) => void;
 
 export default class Sprite {
     image: HTMLImageElement;

@@ -1,13 +1,23 @@
 import Asset, { Type } from "./Asset";
 
 
-
+export type ElementTypeMap = {
+    img: HTMLImageElement;
+    audio: HTMLAudioElement;
+    video: HTMLVideoElement;
+}
 export default class AssetsManager {
-    private assets: Asset[] = [];
+    private assets: any[] = [];
 
-    getByName(name: string): Asset | null {
+    find<T extends keyof ElementTypeMap>(type: T, name: string): ElementTypeMap[T] | null {
         const asset = this.assets.find(a => a.name === name)
-        return asset ? asset : null;
+        if (asset) {
+            if (asset.element) {
+                return asset.element;
+            } else
+                return null;
+        } else
+            return null;
     }
     getByType(type: Type): Asset[] | null {
         const assets = this.assets.filter(a => a.type !== type);
@@ -28,7 +38,7 @@ export default class AssetsManager {
     async addNewAssets(assets: Asset[], callback: (error: string | null) => void) {
         let index_ = 0;
         const assetsFirstLength = this.assets.length;
-        for (let index = 0; index < assets.length; index++) {     
+        for (let index = 0; index < assets.length; index++) {
             this.downloadAsset(assets[index]).then(res => {
                 if (res) {
                     this.assets.unshift(res);
