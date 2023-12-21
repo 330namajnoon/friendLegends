@@ -1,18 +1,13 @@
-import engineContext from "../Contexts/EngineContext";
+
 import GameEngine from "../GameEngine";
-import Events from "./Events";
-import PhysicsEnginManager from "./PhysicsEnginManager.ts";
-
-
-export default class Script<EntityType> {
+import App from "./App";
+export default class Script<EntityType> extends App {
     entity: EntityType;
-    ctx: CanvasRenderingContext2D | null = engineContext.ctx;
-    engine: PhysicsEnginManager = engineContext.engine;
-    events: Events = engineContext.events;
-    app: GameEngine = engineContext.app;
     initial!: () => void;
     update!: () => void;
-    constructor (entity: EntityType) {
+    constructor (entity: EntityType, app: GameEngine) {
+        super(app);
         this.entity = entity;
+
     }
 }

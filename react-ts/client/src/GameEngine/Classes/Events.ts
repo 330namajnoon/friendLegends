@@ -1,7 +1,6 @@
-import { Type } from './Asset';
+
 import { Body, Query } from "matter-js";
 import Event from "./Event";
-import engineContext from "../Contexts/EngineContext";
 
 export type MouseEventMap = {
     mousedown: MouseEvent;

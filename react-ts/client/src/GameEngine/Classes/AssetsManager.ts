@@ -9,15 +9,9 @@ export type ElementTypeMap = {
 export default class AssetsManager {
     private assets: any[] = [];
 
-    find<T extends keyof ElementTypeMap>(type: T, name: string): ElementTypeMap[T] | null {
+    find<T extends keyof ElementTypeMap>(type: T, name: string): ElementTypeMap[T] {
         const asset = this.assets.find(a => a.name === name)
-        if (asset) {
-            if (asset.element) {
-                return asset.element;
-            } else
-                return null;
-        } else
-            return null;
+        return asset.element;
     }
     getByType(type: Type): Asset[] | null {
         const assets = this.assets.filter(a => a.type !== type);

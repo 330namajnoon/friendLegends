@@ -9,7 +9,7 @@ export default class ValkingMove extends Script<ImageEntity> {
     body!: PhisicBody;
 
     initial = () => {
-        this.body = new PhisicBody(100, 100,
+        this.body = this.app.createPhisicBody(100, 100,
             [
                 [
                     { x: -this.entity.size.x / 2, y: 0 },
@@ -25,7 +25,7 @@ export default class ValkingMove extends Script<ImageEntity> {
                 restitution: 0.1
             },
         );
-        this.engine.worldAdd(this.body.body);
+        this.app.engine.worldAdd(this.body.body);
         Body.setInertia(this.body.body, Infinity);
         Body.setAngularVelocity(this.body.body, 0);
 

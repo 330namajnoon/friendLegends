@@ -17,7 +17,8 @@ import Functions from "./Classes/Functions";
 import AnimationManager from "./Classes/AnimationsManager";
 import Events from "./Classes/Events";
 import Event from "./Classes/Event";
-import { EntityType } from "./Classes/EntitysManager";
+import Scene from "./Classes/Scene";
+import ScenesManager from "./Classes/ScenesManager";
 const INDEX = {
     Engine,
     Animation,
@@ -38,6 +39,8 @@ const INDEX = {
     AnimationManager,
     Events,
     Event,
+    Scene,
+    ScenesManager,
 };
 
 export default INDEX;

@@ -9,8 +9,8 @@ export default class Suelo extends Script<ImageEntity> {
     home!: PhisicBody;
     initial = () => {
         console.log(stringToVector2("11 15 18 52 86"))
-        this.suelo = new PhisicBody(
-            window.innerWidth / 2, 810,
+        this.suelo = this.app.createPhisicBody(
+            window.innerWidth / 2, 500,
             [
                 [
                     {x: 0, y: window.innerHeight - 200},
@@ -23,9 +23,9 @@ export default class Suelo extends Script<ImageEntity> {
                 isStatic: true
             }
         );
-        this.engine.worldAdd(this.suelo.body);
+        this.app.engine.worldAdd(this.suelo.body);
         
-        this.home = new PhisicBody(
+        this.home = this.app.createPhisicBody(
             window.innerWidth / 1.28, 550,
             [
                 [
@@ -43,7 +43,7 @@ export default class Suelo extends Script<ImageEntity> {
                 isStatic: true
             }
         );
-        this.engine.worldAdd(this.home.body);
+        this.app.engine.worldAdd(this.home.body);
         // this.body = new PhisicBody(120, 0,
         //     [
         //         [

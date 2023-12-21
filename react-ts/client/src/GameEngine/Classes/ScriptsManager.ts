@@ -1,13 +1,16 @@
+import GameEngine from "../GameEngine";
 
 export default class ScriptsManager<EntityType> {
+    app: GameEngine;
     entity: EntityType;
     scripts: any[] = [];
-    constructor (entity: EntityType) {
+    constructor (entity: EntityType, app: GameEngine) {
         this.entity = entity;
+        this.app = app;
     }
     setScripts(scripts: any[]) {
         scripts.forEach(s => {
-            this.scripts.push(new s(this.entity));
+            this.scripts.push(new s(this.entity, this.app));
         })
         this.initial();
     }
